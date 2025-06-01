@@ -6,6 +6,7 @@ import { ViewTransitions } from 'next-view-transitions';
 import ForceDarkMode from '@/components/auto-theme-switcher';
 import PrivyProviderComp from '@/components/providers/privy-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
 
 import './globals.css';
 
@@ -42,6 +43,7 @@ export default function RootLayout({
             <ForceDarkMode />
             <PrivyProviderComp>{children}</PrivyProviderComp>
           </ThemeProvider>
+          <Toaster />
         </body>
       </html>
     </ViewTransitions>
