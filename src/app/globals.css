@@ -136,3 +136,15 @@
 .swiper-pagination-bullet-active.custom-bullet {
   background-color: #10f022; /* amber-500 */
 }
+
+.announcement-swiper .swiper-pagination-bullet {
+  background-color: rgba(139, 131, 131, 0.726);
+  width: 5px;
+  height: 5px;
+}
+
+.announcement-swiper .swiper-pagination-bullet-active {
+  background-color: #f9f7fa; /* amber-400 */
+  width: 12;
+  height: 2;
+}

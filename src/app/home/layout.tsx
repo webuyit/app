@@ -9,7 +9,7 @@ export default function RootLayout({
 }>) {
   return (
     <div
-      className={`w-full border-emerald-600 px-2 md:mx-auto md:max-w-md md:border`}
+      className={`w-full overflow-hidden border-emerald-600 md:mx-auto md:max-w-md md:border`}
     >
       {children}
       <div>
