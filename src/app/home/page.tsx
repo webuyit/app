@@ -3,6 +3,7 @@ import React from 'react';
 import Announcements from '@/components/home/announcements';
 import Players from '@/components/home/players';
 import Popular from '@/components/home/popular-games';
+import UpcomingGames from '@/components/home/upcoming/upcoming-games';
 
 export default function page() {
   return (
@@ -11,6 +12,7 @@ export default function page() {
         <Announcements />
         <Players />
         <Popular />
+        <UpcomingGames />
       </div>
       Home page
     </div>

@@ -8,12 +8,12 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { popularBets } from '@/lib/constants';
 
-import PopularGamesCard from './popular-games-card';
+import UpcomingGameCard from './upcoming-game-card';
 
-export default function Popular() {
+export default function UpcomingGames() {
   return (
     <div className="px-2">
-      <h3 className="mb-3 text-lg font-semibold">Popular Bets</h3>
+      <h3 className="mb-3 text-lg font-semibold">Upcoming</h3>
 
       <Swiper
         modules={[Autoplay]}
@@ -27,9 +27,9 @@ export default function Popular() {
           return (
             <SwiperSlide
               key={i}
-              className="flex !w-[180px] flex-col items-center"
+              className="flex !w-[190px] flex-col items-center"
             >
-              <PopularGamesCard data={item} />
+              <UpcomingGameCard data={item} />
             </SwiperSlide>
           );
         })}
