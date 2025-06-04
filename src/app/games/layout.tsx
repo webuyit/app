@@ -1,5 +1,6 @@
+import type { Metadata } from 'next';
+
 import BottomNav from '@/components/home/bottom-navbar';
-import TopNavbar from '@/components/top-navbar';
 
 export default function RootLayout({
   children,
@@ -10,9 +11,8 @@ export default function RootLayout({
     <div
       className={`w-full overflow-hidden border-emerald-600 md:mx-auto md:max-w-md md:border`}
     >
-      <TopNavbar />
       {children}
-      <div className="mt-16">
+      <div>
         <BottomNav />
       </div>
     </div>

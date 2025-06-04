@@ -39,7 +39,7 @@ export default function UpcomingGameCard(data: Props) {
           className="h-full w-full object-cover"
         />
 
-        <div className="absolute inset-0 h-full w-full rounded-xl bg-black/10 p-2 text-white opacity-100">
+        <div className="absolute inset-0 h-full w-full rounded-xl bg-black/20 p-2 text-white opacity-100">
           <div className="absolute flex items-start justify-start">
             <Image
               src={data.data.players[0].team.logo}
@@ -52,13 +52,16 @@ export default function UpcomingGameCard(data: Props) {
 
           {/* card body */}
 
-          <div className="flex h-full w-full flex-col items-center justify-end">
-            <div className="flex w-full flex-col items-center justify-center space-y-2">
+          <div className="flex h-full w-full flex-col items-center justify-end rounded-md bg-gradient-to-b from-black/15 to-red-700/30 p-0.5">
+            <div className="flex w-full flex-col items-center justify-center space-y-1">
               <div className="flex flex-col items-center justify-center">
-                <p> {truncateMiddle(data.data.title, 10, 5, 30)}</p>
+                <p className="-mb-1 text-sm">
+                  {' '}
+                  {truncateMiddle(data.data.title, 10, 5, 30)}
+                </p>
                 <Countdown
                   endTime={data.data.endsAt}
-                  className="font-serif text-primary-foreground"
+                  className="font-serif text-sm text-primary-foreground"
                 />
               </div>
               <div>

@@ -4,6 +4,8 @@ import {
   IconBrandTelegram,
   IconBrandX,
   IconClipboardList,
+  IconDeviceGamepad,
+  IconDeviceGamepad2,
   IconHome,
   IconUser,
   IconWorldWww,
@@ -47,6 +49,11 @@ export const bottomNavbar = [
     title: 'Contracts',
     icon: IconClipboardList,
     url: '/contracts',
+  },
+  {
+    title: 'Battle',
+    icon: IconDeviceGamepad2,
+    url: '/games',
   },
   {
     title: 'Notifications',

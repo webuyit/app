@@ -17,37 +17,39 @@ import { AspectRatio } from '../ui/aspect-ratio';
 
 export default function Announcements() {
   return (
-    <AspectRatio ratio={15 / 5} className="relative border border-red-400">
-      <Swiper
-        modules={[Pagination, Autoplay]}
-        spaceBetween={0}
-        slidesPerView={1}
-        loop={true}
-        autoplay={{
-          delay: 4000,
-          disableOnInteraction: false,
-        }}
-        pagination={{
-          clickable: true,
-        }}
-        className="announcement-swiper h-full w-full"
-      >
-        {announcements.map((item, i) => (
-          <SwiperSlide key={i}>
-            <div className="h-full w-full">
-              <Image
-                src={item.coverUrl}
-                alt="Cover"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </SwiperSlide>
-        ))}
+    <div className="mt-[52px] w-full">
+      <AspectRatio ratio={15 / 5} className="relative border border-red-400">
+        <Swiper
+          modules={[Pagination, Autoplay]}
+          spaceBetween={0}
+          slidesPerView={1}
+          loop={true}
+          autoplay={{
+            delay: 4000,
+            disableOnInteraction: false,
+          }}
+          pagination={{
+            clickable: true,
+          }}
+          className="announcement-swiper h-full w-full"
+        >
+          {announcements.map((item, i) => (
+            <SwiperSlide key={i}>
+              <div className="h-full w-full">
+                <Image
+                  src={item.coverUrl}
+                  alt="Cover"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </SwiperSlide>
+          ))}
 
-        {/* Pagination overlay */}
-        <div className="swiper-pagination absolute !bottom-3 !left-1/2 z-10 !-translate-x-1/2" />
-      </Swiper>
-    </AspectRatio>
+          {/* Pagination overlay */}
+          <div className="swiper-pagination absolute !bottom-3 !left-1/2 z-10 !-translate-x-1/2" />
+        </Swiper>
+      </AspectRatio>
+    </div>
   );
 }

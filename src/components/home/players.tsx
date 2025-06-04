@@ -4,6 +4,7 @@ import React from 'react';
 
 import Image from 'next/image';
 
+import { Link } from 'next-view-transitions';
 import 'swiper/css';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -29,13 +30,15 @@ export default function Players() {
             className="flex !w-[70px] flex-shrink-0 flex-col items-center"
           >
             <div className="h-[60px] w-[60px] overflow-hidden rounded-full border-2 border-yellow-500">
-              <Image
-                src={item.avatar}
-                alt={item.name}
-                width={80}
-                height={80}
-                className="h-full w-full rounded-full object-cover"
-              />
+              <Link href={`/players/1`}>
+                <Image
+                  src={item.avatar}
+                  alt={item.name}
+                  width={80}
+                  height={80}
+                  className="h-full w-full rounded-full object-cover"
+                />
+              </Link>
             </div>
             <p className="mt-1 text-center text-xs text-muted-foreground">
               {item.name}
