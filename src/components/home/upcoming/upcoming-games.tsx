@@ -6,7 +6,7 @@ import 'swiper/css';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { popularBets } from '@/lib/constants';
+import { popularBets, upcomingMarkets } from '@/lib/constants';
 
 import UpcomingGameCard from './upcoming-game-card';
 
@@ -23,7 +23,7 @@ export default function UpcomingGames() {
         slidesPerView="auto"
         className="!overflow-visible"
       >
-        {popularBets.map((item, i) => {
+        {upcomingMarkets.map((item, i) => {
           return (
             <SwiperSlide
               key={i}

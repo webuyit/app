@@ -6,7 +6,8 @@ import { ViewTransitions } from 'next-view-transitions';
 import ForceDarkMode from '@/components/auto-theme-switcher';
 import PrivyProviderComp from '@/components/providers/privy-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
-import { Toaster } from '@/components/ui/sonner';
+import { Toaster } from '@/components/ui/toaster';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 import './globals.css';
 
@@ -33,16 +34,11 @@ export default function RootLayout({
   return (
     <ViewTransitions>
       <html lang="en" suppressHydrationWarning>
-        <body className={`${geistSans.variable} ${geistMono.variable}`}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem={false}
-            disableTransitionOnChange
-          >
-            <ForceDarkMode />
-            <PrivyProviderComp>{children}</PrivyProviderComp>
-          </ThemeProvider>
+        <body className={`${geistSans.variable} ${geistMono.variable} `}>
+          <PrivyProviderComp>
+            <TooltipProvider>{children}</TooltipProvider>
+          </PrivyProviderComp>
+
           <Toaster />
         </body>
       </html>

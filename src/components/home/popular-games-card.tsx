@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 import { IconClock, IconDiamond, IconEye } from '@tabler/icons-react';
 
+import { COIN_URL } from '@/lib/constants';
 import { truncateMiddle } from '@/lib/utils';
 import { MARKET } from '@/types/types';
 
@@ -23,7 +24,7 @@ export default function PopularGamesCard(data: Props) {
     <div className="space-y-2 rounded-xl border bg-muted/20 p-2 shadow-sm">
       {/* Top section: Player and Club */}
       <div className="flex items-center justify-between gap-2">
-        <div className="relative rounded-md border border-green-500/60">
+        <div className="relative rounded-md border">
           <Image
             width={40}
             height={40}
@@ -49,11 +50,17 @@ export default function PopularGamesCard(data: Props) {
             />
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex hidden items-center gap-1 text-xs text-muted-foreground">
-              <IconDiamond className="h-4 w-4 text-yellow-300" />
-              <span className="font-semibold">32.66 M</span>
-            </div>
             <div className="flex items-center gap-1 text-xs text-muted-foreground">
+              <Image
+                src={COIN_URL}
+                width={20}
+                height={20}
+                alt="coin"
+                className="h-3 w-3 rounded-full object-cover"
+              />
+              <span className="font-semibold">32.66m</span>
+            </div>
+            <div className="flex hidden items-center gap-1 text-xs text-muted-foreground">
               <IconClock className="h-4 w-4 text-green-600" />
               <Countdown endTime={data.data.endsAt} />
             </div>
@@ -64,12 +71,9 @@ export default function PopularGamesCard(data: Props) {
       {/* Best outcome */}
       <div className="flex items-center justify-between">
         <div className="space-y-0">
-          <p className="text-sm font-semibold text-secondary-foreground/70">
-            x{bestOutcome.odds}
-          </p>
-          <p className="text-xs text-muted-foreground">{bestOutcome.label}</p>
+          <p className="text-xs font-semibold">x{bestOutcome.odds}</p>
         </div>
-        <Button size="sm" variant={'secondary'}>
+        <Button size="sm" className="h-6">
           Bet
         </Button>
       </div>

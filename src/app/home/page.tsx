@@ -1,21 +1,35 @@
-import React from 'react';
+import Home from '@/components/home-2/home';
+import { SERVER_URL } from '@/lib/constants';
+import { MARKETS, PLAYERS, TOURNAMENTS } from '@/types/types';
 
-import Announcements from '@/components/home/announcements';
-import Leagues from '@/components/home/league/leagues';
-import Players from '@/components/home/players';
-import Popular from '@/components/home/popular-games';
-import UpcomingGames from '@/components/home/upcoming/upcoming-games';
+export default async function page() {
+  // Fetch all 3 in parallel with caching
+  const [playersRes, marketsRes, tournamentsRes] = await Promise.all([
+    fetch(`${SERVER_URL}players/basic?limit=5`, {
+      //next: { revalidate: 60 }, // Revalidate every 60s
+      cache: 'no-store',
+    }),
+    fetch(`${SERVER_URL}markets/basic?limit=5`, {
+      // next: { revalidate: 120 },
+      cache: 'no-store',
+    }),
+    fetch(`${SERVER_URL}tournaments`, {
+      //next: { revalidate: 300 },
+      cache: 'no-store',
+    }),
+  ]);
 
-export default function page() {
+  // Parse JSON responses
+  const [players, markets, tournaments]: [PLAYERS, MARKETS, TOURNAMENTS] =
+    await Promise.all([
+      playersRes.json(),
+      marketsRes.json(),
+      tournamentsRes.json(),
+    ]);
+
   return (
-    <div className="">
-      <div className="space-y-4">
-        <Announcements />
-        <Players />
-        <Popular />
-        <UpcomingGames />
-        <Leagues />
-      </div>
+    <div className="min-h-screen">
+      <Home players={players} markets={markets} tournaments={tournaments} />
     </div>
   );
 }

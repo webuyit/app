@@ -2,9 +2,14 @@ import React from 'react';
 
 import Image from 'next/image';
 
-export default function LeagueCard() {
+import { TOURNAMENT } from '@/types/types';
+
+type Props = {
+  data: TOURNAMENT;
+};
+export default function LeagueCard({ data }: Props) {
   return (
-    <div className="h-60 w-full rounded-xl border bg-background/15 p-1">
+    <div className="relative h-56 w-full rounded-xl border bg-background/15 bg-muted p-1">
       <Image
         src={`/img/cover.jpeg`}
         width={1500}
@@ -12,7 +17,7 @@ export default function LeagueCard() {
         alt="cover"
         className="rounded-t-xl object-cover"
       />
-      <div className="h-24 w-full bg-yellow-300"></div>
+      <div className="absolute left-0 top-[52%] h-24 w-full rounded-xl border border-yellow-500"></div>
     </div>
   );
 }

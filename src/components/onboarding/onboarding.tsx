@@ -35,27 +35,30 @@ export default function Onboarding() {
     },
     onSuccess: () => {
       toast.success('Account created!');
+      console.log('Created be account succfully');
     },
-    onError: () => {
+    onError: (err) => {
       toast.error('Failed to Register profile');
+      console.log('Creating acc failed', err);
     },
   });
 
   //  Refirect user to Home page
-  useEffect(() => {
+  /* useEffect(() => {
     if (authenticated) {
       router.replace('/home');
     }
-  }, [authenticated]);
+  }, [authenticated]);*/
 
   const { login } = useLogin({
     onComplete: async ({
       user,
-      isNewUser,
+      //isNewUser,
       wasAlreadyAuthenticated,
       loginMethod,
       loginAccount,
     }) => {
+      console.log('From in-complete');
       //router.push('/home');
       // if(loginMethod === "")
 
@@ -99,8 +102,9 @@ export default function Onboarding() {
       const email = user.email?.address || '';
       const publicKey = user.wallet?.address || '';
       const privyId = user.id;
-
+      const isNewUser = true;
       if (isNewUser) {
+        console.log("I'm at wallet create account");
         const metadata: USER_PROFILE_PROPS = {
           email,
           publicKey,
@@ -118,7 +122,7 @@ export default function Onboarding() {
           metadata.fullName = user.twitter?.name || '';
           metadata.profilePicture = user.twitter?.profilePictureUrl || '';
         }
-
+        console.log("I'm Invoked down");
         mutation.mutateAsync(metadata);
       }
 

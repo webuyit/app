@@ -5,6 +5,9 @@ import React from 'react';
 import Image from 'next/image';
 
 import {
+  IconBallBasketball,
+  IconBallTennis,
+  IconBasketBolt,
   IconChevronUp,
   IconChevronsDown,
   IconChevronsUp,
@@ -27,76 +30,73 @@ export default function UpcomingGameCard(data: Props) {
     current.odds > prev.odds ? current : prev,
   );
 
-  console.log('best outcome', bestOutcome);
+  console.log('Upcoming card data', data);
+  const cardHeader = () => {
+    return (
+      <div className="flex items-center justify-between">
+        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-orange-500">
+          {data.data.category === 'FOOTBALL' ? (
+            <IconBallBasketball className="h-4 w-4 text-white" />
+          ) : (
+            <IconBallTennis className="h-4 w-4 text-white" />
+          )}
+        </div>
+        <div className="bg-blue-600 px-1 py-0.5 text-xs font-semibold text-white">
+          {data.data.category}
+        </div>
+      </div>
+    );
+  };
   return (
-    <div className="space-y-2 rounded-xl border bg-muted/20 shadow-sm">
-      <div className="relative rounded-xl border border-emerald-400/5 p-1">
-        <Image
-          src={data.data.players[0].profilePicture}
-          width={1000}
-          height={600}
-          alt="cover"
-          className="h-full w-full object-cover"
-        />
+    <div className="border-lime-primary w-48 overflow-hidden rounded-3xl border-2 bg-black/95 p-2 shadow-2xl backdrop-blur-md">
+      {/* CARD HEADER */}
+      <div>{cardHeader()}</div>
+      {/* CARD BODY */}
 
-        <div className="absolute inset-0 h-full w-full rounded-xl bg-black/20 p-2 text-white opacity-100">
-          <div className="absolute flex items-start justify-start">
-            <Image
-              src={data.data.players[0].team.logo}
-              width={60}
-              height={60}
-              alt="team"
-              className="h-9 w-9 rounded-full object-cover"
+      <div className="relative mb-2 mt-3 h-36 overflow-hidden rounded-2xl border border-red-700">
+        <Image
+          src={`/img/player-1.webp`}
+          alt={data.data.title}
+          className="h-full w-full object-cover"
+          width={300}
+          height={300}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        <div className="absolute left-1 top-3">
+          <Image
+            src={`/img/club.svg`}
+            width={30}
+            height={30}
+            alt={`team logo`}
+            className="h-9 w-9 rounded-full object-cover"
+          />
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 p-4">
+          <div className="mb-1 text-sm font-medium text-white">
+            {data.data.match.teamA.name}
+          </div>
+          <div className="text-xs text-gray-300">
+            vs {data.data.match.teamB.name}
+          </div>
+        </div>
+      </div>
+
+      {/*CARD FOOTER */}
+      <div className="w-full text-center">
+        <h3 className="mb-2 text-xl font-black tracking-wider text-white">
+          Haaland
+        </h3>
+        <div className="flex w-full items-center justify-between">
+          <div className="flex items-center justify-center gap-1">
+            <IconClock className="h-4 w-4 text-muted-foreground" />
+            <Countdown
+              endTime={data.data.endsAt}
+              className="text-lime-primary inline-block text-xs font-semibold"
             />
           </div>
-
-          {/* card body */}
-
-          <div className="flex h-full w-full flex-col items-center justify-end rounded-md bg-gradient-to-b from-black/15 to-red-700/30 p-0.5">
-            <div className="flex w-full flex-col items-center justify-center space-y-1">
-              <div className="flex flex-col items-center justify-center">
-                <p className="-mb-1 text-sm">
-                  {' '}
-                  {truncateMiddle(data.data.title, 10, 5, 30)}
-                </p>
-                <Countdown
-                  endTime={data.data.endsAt}
-                  className="font-serif text-sm text-primary-foreground"
-                />
-              </div>
-              <div>
-                <p className="font-mono text-2xl">
-                  {data.data.players[0].name}
-                </p>
-              </div>
-              <div>
-                <p className="text-center text-xs">
-                  TVL: <span className="font-semibold text-primary">378</span>
-                </p>
-              </div>
-            </div>
-            {/* CARD FOOTER WITH GAME STATS */}
-
-            <div className="flex w-full items-center justify-between">
-              {data.data.outcomes.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-center justify-center gap-2 rounded-md border p-0.5"
-                >
-                  <div>
-                    {item.label === 'Yes' ? (
-                      <IconChevronsUp className="h-5 w-5" />
-                    ) : (
-                      <IconChevronsDown className="h-5 w-5" />
-                    )}
-                  </div>
-                  <p className="justify-center text-center text-xs text-muted-foreground">
-                    x{item.odds}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
+          <Button size={'sm'} className="h-6">
+            Bet
+          </Button>
         </div>
       </div>
     </div>

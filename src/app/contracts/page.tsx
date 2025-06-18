@@ -1,9 +1,11 @@
 import React from 'react';
 
+import MyBets from '@/components/contracts/contracts';
+
 export default function page() {
   return (
     <div>
-      <p>hello contrac page</p>
+      <MyBets />
     </div>
   );
 }

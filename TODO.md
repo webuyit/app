@@ -1,10 +1,6 @@
 Todo List
 
-1. PWA setup
-2. Onboarding
-3. home screen planning
-4. home screen
-   5.market screen (use sheets)
-5. playerscreen (player screen)
-6. contract screen
-7. replan
+1. Solve Can't send data troubleshoot tanstack query setup
+2. implement all required screen
+3. learn from their mockup data
+4. expand screen

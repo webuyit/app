@@ -13,12 +13,6 @@ export default function Countdown({
 }) {
   const { formatted, isEnded } = useCountdown(endTime);
 
-  console.log('endtime', endTime);
-
   if (isEnded) return <span className="text-red-500">Ended</span>;
-  return (
-    <div>
-      <span className={` ${className}`}>{formatted}</span>
-    </div>
-  );
+  return <span className={` ${className}`}>{formatted}</span>;
 }
