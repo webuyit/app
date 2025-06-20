@@ -6,8 +6,6 @@ import { PWAInstallElement } from '@khmyznikov/pwa-install';
 
 import { getDevicePlatform } from '@/lib/isStandAlone';
 
-import PWAInstallPortal from './pwa-install-button-2';
-
 const PWAInstallButton = dynamic(
   () => import('@/components/onboarding/pwa-install-button'),
   { ssr: false },

@@ -168,8 +168,12 @@ export default function PlayerProfile() {
     return players[id as keyof typeof players] || players['1'];
   };
 
-  const basePlayerData = getPlayerData(playerId || '1');
+  const basePlayerData = getPlayerData(
+    Array.isArray(playerId) ? playerId[0] : playerId || '1',
+  );
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //@ts-expect-error
   const mockPlayer: Player = {
     ...basePlayerData,
     performance: [

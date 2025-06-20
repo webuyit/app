@@ -97,7 +97,7 @@ export interface MARKET {
   id: string;
   title: string;
   description: string;
-  ooverUrl: string;
+  coverUrl: string;
   isHot: boolean;
   isFeatured: boolean;
   category?: 'ESPORT' | 'FOOTBALL' | 'BASEBALL' | 'SOCCER' | 'FANTASY';

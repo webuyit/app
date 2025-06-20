@@ -257,7 +257,7 @@ export function BetShareCard({
             <div
               className={`text-sm font-medium ${isWin ? 'text-green-800' : 'text-red-800'}`}
             >
-              {bet.player.name}'s {bet.betType}
+              {bet.player.name}&apos;s {bet.betType}
             </div>
             <div className="mt-1 text-sm text-gray-600">
               Bet: {bet.description}
@@ -310,7 +310,7 @@ export function BetShareCard({
         <Button
           onClick={downloadCard}
           disabled={isGenerating}
-          className="rounded-xl bg-primary px-6 py-3 font-medium text-white hover:bg-primary/90"
+          className="hover:bg-primary/90 rounded-xl bg-primary px-6 py-3 font-medium text-white"
         >
           {isGenerating ? (
             <div className="flex items-center space-x-2">

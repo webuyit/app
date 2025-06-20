@@ -37,7 +37,7 @@ export default function Announcements() {
             <SwiperSlide key={i}>
               <div className="h-full w-full">
                 <Image
-                  src={item.coverUrl}
+                  src={item.icon}
                   alt="Cover"
                   fill
                   className="object-cover"

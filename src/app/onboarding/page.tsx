@@ -7,7 +7,7 @@ import OnboardingScreen from '@/components/onboarding/onboarding-2';
 export default function page() {
   return (
     <div>
-      <AccessCodeEntry />
+      <OnboardingScreen />
     </div>
   );
 }

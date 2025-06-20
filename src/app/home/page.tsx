@@ -32,9 +32,7 @@ export default async function page() {
 
   return (
     <div className="">
-      <PWAStandaloneGuard>
-        <Home players={players} markets={markets} tournaments={tournaments} />
-      </PWAStandaloneGuard>
+      <Home players={players} markets={markets} tournaments={tournaments} />
     </div>
   );
 }

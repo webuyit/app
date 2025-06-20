@@ -40,11 +40,11 @@ export default function PWAInstallButton() {
       {/*eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
       {/*@ts-expect-error  */}
       <pwa-install
-        ref={installRef}
-        name="My PWA App"
-        manifest-url="/manifest.webmanifest"
-        manual-chrome="true"
         manual-apple="true"
+        manual-chrome="true"
+        ref={installRef}
+        name="GOAT"
+        manifest-url="/manifest.webmanifest"
         externalpromptEvent={promptEvent}
       >
         {/*eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
