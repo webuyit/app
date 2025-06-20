@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+import Image from 'next/image';
+
 import {
   Banknote,
   Coins,
@@ -281,7 +283,14 @@ export default function Profile() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-full">
-                      <Coins size={20} className="text-primary" />
+                      <Coins size={20} className="hidden text-primary" />
+                      <Image
+                        src={`/img/coin.svg`}
+                        width={20}
+                        height={20}
+                        alt="currency"
+                        className=""
+                      />
                     </div>
                     <div>
                       <p className="text-sm text-gray-600 dark:text-gray-400">

@@ -1,8 +1,11 @@
 'use client';
 
+import Image from 'next/image';
+
 import { Bell, Trophy, User } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { COIN_URL } from '@/lib/constants';
 
 export function Header() {
   return (
@@ -12,8 +15,17 @@ export function Header() {
           <Trophy className="text-white" size={16} />
         </div>
         <div>
-          <h1 className="text-lg font-semibold text-gray-900">AthleteBet</h1>
-          <p className="text-xs text-gray-500">$2,450.00</p>
+          <h1 className="font-semibold text-gray-900">GOATs Arena</h1>
+          <div className="flex items-center gap-0.5">
+            <Image
+              src={`/img/coin.svg`}
+              width={15}
+              height={15}
+              alt="currency"
+              className=""
+            />
+            <p className="text-xs text-gray-500">2,450.00</p>
+          </div>
         </div>
       </div>
       <div className="flex items-center space-x-2">

@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import {
+  ArrowBigDown,
+  ArrowDown,
   ArrowRight,
   ArrowUpDown,
   CheckCircle,
@@ -109,16 +111,6 @@ const mockTokens: Token[] = [
     chaserRate: 300,
   },
   {
-    //id: 2,
-    name: 'Santos FC Fan Token',
-    symbol: 'SANTOS',
-    balance: '22.6',
-    price: 2.8,
-    //change: '+2.41%',
-    chaserRate: 202,
-    icon: 'https://www.fantokens.com/_next/image?url=https%3A%2F%2Ffirebasestorage.googleapis.com%2Fv0%2Fb%2Ffmc-27374.appspot.com%2Fo%2Ftokens%252F5987aa38-183a-40ac-9884-a7e4c813c0ff%3Falt%3Dmedia%26token%3D534e03da-f4a1-4bb0-9138-9af0d49ccd27&w=48&q=75&dpl=dpl_VtpN26CmG4bEU3sAhAL7d6nZNj9j',
-  },
-  {
     //id: 3,
     name: 'Paris Saint-Germain Fan Token',
     symbol: 'PSG',
@@ -128,6 +120,17 @@ const mockTokens: Token[] = [
     chaserRate: 208,
     icon: 'https://www.fantokens.com/_next/image?url=https%3A%2F%2Ffirebasestorage.googleapis.com%2Fv0%2Fb%2Ffmc-27374.appspot.com%2Fo%2Ftokens%252Fbcc570e7-d233-42a6-858c-4c6d126501ca%3Falt%3Dmedia%26token%3D10112bc1-6807-4df4-b44a-8a2f169c2c6a&w=48&q=75&dpl=dpl_VtpN26CmG4bEU3sAhAL7d6nZNj9j',
   },
+  {
+    //id: 2,
+    name: 'Santos FC Fan Token',
+    symbol: 'SANTOS',
+    balance: '22.6',
+    price: 2.8,
+    //change: '+2.41%',
+    chaserRate: 202,
+    icon: 'https://www.fantokens.com/_next/image?url=https%3A%2F%2Ffirebasestorage.googleapis.com%2Fv0%2Fb%2Ffmc-27374.appspot.com%2Fo%2Ftokens%252F5987aa38-183a-40ac-9884-a7e4c813c0ff%3Falt%3Dmedia%26token%3D534e03da-f4a1-4bb0-9138-9af0d49ccd27&w=48&q=75&dpl=dpl_VtpN26CmG4bEU3sAhAL7d6nZNj9j',
+  },
+
   {
     //id: 4,
     name: 'Juventus Fan Token',
@@ -342,7 +345,7 @@ export function ChaserSwapDrawer({
                 {/*Swap contents */}
                 <div className="scrollbar-hide max-h-[60vh] overflow-y-auto">
                   {/* Token Selection */}
-                  <div className="space-y-3">
+                  <div className="mb-3 space-y-2">
                     <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       {swapDirection === 'buy' ? 'Pay with' : 'Receive'}
                     </label>
@@ -355,7 +358,7 @@ export function ChaserSwapDrawer({
                         if (token) setSelectedToken(token);
                       }}
                     >
-                      <SelectTrigger className="h-12 w-full focus:outline-none">
+                      <SelectTrigger className="h-12 w-full focus:border focus:ring-0 focus:ring-offset-0">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="">
@@ -369,10 +372,10 @@ export function ChaserSwapDrawer({
                                 </AvatarFallback>
                               </Avatar>
                               <div>
-                                <div className="font-medium">
+                                <div className="text-start text-sm">
                                   {token.symbol}
                                 </div>
-                                <div className="text-xs text-gray-500">
+                                <div className="text-start text-xs text-gray-500">
                                   {truncateMiddle(token.name, 5, 5, 8)}
                                 </div>
                               </div>
@@ -398,7 +401,7 @@ export function ChaserSwapDrawer({
 
                   {/* Quick Amount Buttons */}
                   {swapDirection === 'buy' && (
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                         Quick amounts ({selectedToken.symbol})
                       </label>
@@ -420,7 +423,7 @@ export function ChaserSwapDrawer({
 
                   {/* Chaser Bundles */}
                   {swapDirection === 'buy' && (
-                    <div className="space-y-3">
+                    <div className="mt-3 space-y-2">
                       <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                         Chaser Bundles
                       </label>
@@ -485,7 +488,7 @@ export function ChaserSwapDrawer({
                           placeholder="0.00"
                           value={inputAmount}
                           onChange={(e) => setInputAmount(e.target.value)}
-                          className="pr-16 text-lg font-medium"
+                          className="border border-input pr-16 text-lg font-medium ring-0 focus:border-muted focus:outline-none focus:ring-0 focus:ring-offset-0"
                         />
                         <div className="absolute right-3 top-1/2 -translate-y-1/2">
                           <span className="text-sm font-medium text-gray-500">
@@ -500,7 +503,7 @@ export function ChaserSwapDrawer({
                     {/* Arrow */}
                     <div className="flex justify-center">
                       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-                        <ArrowRight
+                        <ArrowDown
                           size={16}
                           className="text-gray-600 dark:text-gray-400"
                         />

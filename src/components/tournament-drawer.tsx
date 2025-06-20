@@ -229,7 +229,9 @@ export function TournamentDrawer({
         <div className="mx-auto w-full max-w-md">
           {/* Header with Tournament Branding */}
           <DrawerHeader className="relative overflow-hidden">
-            <div className={`absolute inset-0 ${theme.gradient} opacity-90`} />
+            <div
+              className={`absolute inset-0 ${theme.gradient} rounded-t-lg opacity-90`}
+            />
             <div className="absolute inset-0 bg-black/20" />
 
             <div className="relative z-10 py-6 text-center">
