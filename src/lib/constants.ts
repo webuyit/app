@@ -10,6 +10,7 @@ import {
   IconUser,
   IconWorldWww,
 } from '@tabler/icons-react';
+import { FaDiscord, FaGlobe, FaTelegram, FaTwitter } from 'react-icons/fa';
 
 import { ANNOUNCEMENTS_TYPE, MARKET } from '@/types/types';
 
@@ -611,4 +612,11 @@ export const announcements: ANNOUNCEMENTS_TYPE[] = [
     isActive: true,
     order: 3,
   },
+];
+
+export const socialLinks = [
+  { name: 'Discord', icon: FaDiscord, color: '#5865F2', href: '#' },
+  { name: 'Twitter', icon: FaTwitter, color: '#1DA1F2', href: '#' },
+  { name: 'Telegram', icon: FaTelegram, color: '#0088CC', href: '#' },
+  { name: 'Website', icon: FaGlobe, color: '#6B7280', href: '#' },
 ];

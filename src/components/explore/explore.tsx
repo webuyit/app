@@ -15,6 +15,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { MARKET, PLAYER } from '@/types/types';
 
+import InitUserClient from '../initUserClient';
+
 const sportCategories = [
   { id: 'all', name: 'All Sports', icon: '🏆' },
   { id: 'basketball', name: 'Basketball', icon: '🏀' },
@@ -307,7 +309,7 @@ export default function Explore({ players, markets }: Props) {
           </div>
         )}
       </div>
-
+      <InitUserClient />
       <BottomNavigation />
     </div>
   );

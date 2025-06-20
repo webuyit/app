@@ -2,25 +2,27 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'GOAT',
-    short_name: 'GOAT',
-    description: 'A Progressive Web App built with Next.js',
+    name: 'Zapfy',
+    short_name: 'Zapfy',
+    description:
+      'Zapfy helps you send parcels quicker and smarter, whether you’re a business or just sending to loved ones',
     start_url: '/',
+    id: '/',
+    scope: '/',
     display: 'standalone',
-    background_color: '#000000',
-    theme_color: '#000000',
+    background_color: '#facc15',
+    theme_color: '#7dd3fc',
     icons: [
       {
-        src: '/web-app-manifest-192x192.png',
+        src: '/icon-192x192.png',
         sizes: '192x192',
         type: 'image/png',
-        purpose: 'maskable',
       },
+
       {
-        src: '/web-app-manifest-512x512.png',
+        src: '/icon-512x512.png',
         sizes: '512x512',
         type: 'image/png',
-        purpose: 'maskable',
       },
     ],
   };

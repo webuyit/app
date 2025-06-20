@@ -9,7 +9,7 @@ export interface SLIDE_DATA {
 }
 
 export interface USER_PROFILE_PROPS {
-  email: string;
+  email?: string;
   userName?: string;
   firstName?: string;
   lastName?: string;
@@ -201,3 +201,85 @@ export interface ANNOUNCEMENTS_TYPE {
   isActive: boolean;
   order: number;
 }
+
+export interface WalletInfo {
+  walletSource: string;
+  name: string;
+  publicKey: string;
+  active: boolean;
+}
+
+export interface UserProfile {
+  id: string;
+  privyId: string;
+  clerkId: string | null;
+  faucetPoints: number;
+  points: number;
+  profilePicture: string;
+  firstName: string | null;
+  lastName: string | null;
+  fullName: string;
+  authMethod: string;
+  email: string;
+  phone: string | null;
+  username: string | null;
+  lastClaimedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  earlyAccess: boolean;
+  degenMode: boolean;
+  referralCode: string;
+  referredById: string | null;
+  wallets: WalletInfo[];
+}
+
+export interface UserStats {
+  betsCount: number;
+  unreadNotifications: number;
+}
+
+export interface UserStore {
+  user: UserProfile | null;
+  stats: UserStats;
+  setUser: (userData: { user: UserProfile; stats: UserStats }) => void;
+  clearUser: () => void;
+}
+
+/*
+
+{
+  "user": {
+    "id": "cmc0cdd350000tpqwpul4us7k",
+    "privyId": "did:privy:cmbdp6ry100r3l40msy6ptnby",
+    "clerkId": null,
+    "faucetPoints": 100,
+    "points": 0,
+    "profilePicture": "https://pbs.twimg.com/profile_images/1926921314402447361/-dgoMdlT_normal.png",
+    "firstName": null,
+    "lastName": null,
+    "fullName": "GOAT 🐐",
+    "authMethod": "TWITTER",
+    "email": "",
+    "phone": null,
+    "username": null,
+    "lastClaimedAt": null,
+    "createdAt": "2025-06-17T09:49:37.024Z",
+    "updatedAt": "2025-06-17T09:49:37.024Z",
+    "earlyAccess": false,
+    "degenMode": false,
+    "referralCode": "tEMy3y",
+    "referredById": null,
+    "wallets": [
+      {
+        "walletSource": "PRIVY",
+        "name": "PRIVY",
+        "publicKey": "0x9CCB751a2BC4061B9d6cA49c71412Ae0e414bc8f",
+        "active": true
+      }
+    ]
+  },
+  "stats": {
+    "betsCount": 0,
+    "unreadNotifications": 0
+  }
+}*/

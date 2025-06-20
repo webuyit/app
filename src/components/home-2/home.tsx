@@ -15,6 +15,7 @@ import {
   TOURNAMENTS,
 } from '@/types/types';
 
+import InitUserClient from '../initUserClient';
 import { GatedTournamentsSection } from '../upcoming-events/gated-tournaments-section';
 
 type HomeProps = {
@@ -34,6 +35,7 @@ export default function Home({ players, markets, tournaments }: HomeProps) {
         <UpcomingEventsSection events={markets.markets} />
         <TournamentsSection tournaments={tournaments.tornaments} />
         <GatedTournamentsSection tournaments={tournaments.tornaments} />
+        <InitUserClient />
       </div>
       <BottomNavigation />
     </div>

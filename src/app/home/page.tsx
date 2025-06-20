@@ -1,3 +1,6 @@
+import { cookies } from 'next/headers';
+
+import PWAStandaloneGuard from '@/components/PWAStandaloneGuard';
 import Home from '@/components/home-2/home';
 import { SERVER_URL } from '@/lib/constants';
 import { MARKETS, PLAYERS, TOURNAMENTS } from '@/types/types';
@@ -28,8 +31,10 @@ export default async function page() {
     ]);
 
   return (
-    <div className="min-h-screen">
-      <Home players={players} markets={markets} tournaments={tournaments} />
+    <div className="">
+      <PWAStandaloneGuard>
+        <Home players={players} markets={markets} tournaments={tournaments} />
+      </PWAStandaloneGuard>
     </div>
   );
 }

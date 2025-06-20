@@ -20,7 +20,7 @@ export default function PrivyProviderComp({
         clientId={process.env.PRIVY_APP_SECRET!}
         config={{
           appearance: {
-            theme: 'dark',
+            theme: 'light',
           },
           // Create embedded wallets for users who don't have a wallet
           embeddedWallets: {

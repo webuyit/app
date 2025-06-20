@@ -28,6 +28,8 @@ import {
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+import InitUserClient from '../initUserClient';
+
 // Mock data for bets
 const mockPremarketBets = [
   {
@@ -569,7 +571,7 @@ export default function MyBets() {
           </TabsContent>
         </Tabs>
       </div>
-
+      <InitUserClient />
       <BottomNavigation />
     </div>
   );

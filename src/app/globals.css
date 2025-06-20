@@ -142,3 +142,64 @@
 .status-completed {
   @apply bg-gray-500 text-white;
 }
+
+/* Onboarding Swiper Styles */
+.onboarding-swiper .swiper-pagination-bullet {
+  background: rgba(255, 255, 255, 0.3);
+  opacity: 1;
+  width: 8px;
+  height: 8px;
+  margin: 0 4px;
+  transition: all 0.3s ease;
+}
+
+.onboarding-swiper .swiper-pagination-bullet-active {
+  background: oklch(76.8% 0.233 130.85);
+  width: 24px;
+  border-radius: 4px;
+}
+
+.onboarding-swiper .swiper-slide {
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.onboarding-swiper .swiper-slide-active {
+  opacity: 1;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
