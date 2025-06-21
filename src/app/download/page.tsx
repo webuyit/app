@@ -7,7 +7,7 @@ import DownloadPage from '@/components/onboarding/download-2';
 export default function page() {
   return (
     <div>
-      <DownloadPage />
+      <DownloadScreen />
     </div>
   );
 }

@@ -144,10 +144,10 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
                 className="h-full w-full object-cover"
               />
             </div>
-            <DrawerTitle className="text-lg font-bold text-gray-900 dark:text-white">
+            <DrawerTitle className="text-lg font-bold capitalize text-gray-900 dark:text-white">
               {market.title}
             </DrawerTitle>
-            <DrawerDescription className="text-sm text-gray-600 dark:text-gray-400">
+            <DrawerDescription className="text-sm capitalize text-gray-600 dark:text-gray-400">
               {market.description}
             </DrawerDescription>
             <div className="mt-2 flex items-center justify-center space-x-2">
@@ -237,7 +237,7 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
                     key={outcome.id}
                     className={`cursor-pointer transition-all duration-200 ${
                       selectedOutcome === outcome.id
-                        ? 'border-primary bg-primary/5 ring-2 ring-primary'
+                        ? 'bg-primary/5 border-primary ring-2 ring-primary'
                         : 'hover:bg-gray-50 dark:hover:bg-gray-800'
                     }`}
                     onClick={() => setSelectedOutcome(outcome.id)}
@@ -308,7 +308,7 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
 
             {/* Payout Calculation */}
             {selectedOutcome && stakeAmount && parseFloat(stakeAmount) > 0 && (
-              <Card className="border-primary/20 bg-gradient-to-r from-primary/10 to-primary/5">
+              <Card className="border-primary/20 from-primary/10 to-primary/5 bg-gradient-to-r">
                 <CardContent className="p-4">
                   <div className="mb-3 flex items-center justify-between">
                     <span className="flex items-center text-sm font-medium text-gray-900 dark:text-white">
@@ -391,7 +391,7 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
                   !stakeAmount ||
                   parseFloat(stakeAmount) <= 0
                 }
-                className="w-full bg-primary py-3 font-medium text-white hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                className="hover:bg-primary/90 w-full bg-primary py-3 font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
                 size="lg"
               >
                 {!selectedOutcome ? (

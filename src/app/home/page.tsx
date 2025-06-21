@@ -8,7 +8,7 @@ import { MARKETS, PLAYERS, TOURNAMENTS } from '@/types/types';
 export default async function page() {
   // Fetch all 3 in parallel with caching
   const [playersRes, marketsRes, tournamentsRes] = await Promise.all([
-    fetch(`${SERVER_URL}players/basic?limit=5`, {
+    fetch(`${SERVER_URL}players/basic?limit=10`, {
       //next: { revalidate: 60 }, // Revalidate every 60s
       cache: 'no-store',
     }),

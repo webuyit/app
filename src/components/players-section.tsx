@@ -40,7 +40,7 @@ export function PlayersSection({ players }: PlayerProps) {
             >
               <div className="relative">
                 <Avatar
-                  className={`h-16 w-16 border-2 ${player.verified ? 'border-primary' : 'border-gray-300'} p-0.5`}
+                  className={`h-16 w-16 border-2 ${player.featured ? 'border-primary' : 'border-gray-300'} p-0.5`}
                 >
                   <AvatarImage
                     src={player.profilePicture}
@@ -57,7 +57,7 @@ export function PlayersSection({ players }: PlayerProps) {
                 </Avatar>
                 <div
                   className={`absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white ${
-                    player.verified ? 'bg-green-500' : 'bg-gray-400'
+                    player.featured ? 'bg-green-500' : 'bg-gray-400'
                   }`}
                 >
                   {player.verified ? (
