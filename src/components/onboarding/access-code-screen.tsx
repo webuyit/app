@@ -19,7 +19,6 @@ import {
   InputOTPSlot,
 } from '@/components/ui/input-otp';
 import { toast } from '@/hooks/use-toast';
-import { socialLinks } from '@/lib/constants';
 
 const AccessCodeEntry = () => {
   const [accessCode, setAccessCode] = useState('');
@@ -40,8 +39,8 @@ const AccessCodeEntry = () => {
     // Simulate API call
     setTimeout(() => {
       if (
-        accessCode.toLowerCase() === 'demo12' ||
-        accessCode.toLowerCase() === 'welcom'
+        accessCode.toLowerCase() === 'xcyxy' ||
+        accessCode.toLowerCase() === 'weuyb'
       ) {
         toast({
           title: 'Access Granted! 🎉',
@@ -60,14 +59,18 @@ const AccessCodeEntry = () => {
     setError('');
   };
 
-  const handleSocialClick = (href: string) => {
-    if (href !== '#') {
-      window.open(href, '_blank');
+  // https://discord.gg/pGzpYGuM
+  const openInNewTab = (url: string) => {
+    if (!url.startsWith('http')) {
+      console.warn('URL should be absolute. Example: https://example.com');
+      return;
     }
+
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
   return (
     <div className="flex h-screen w-full items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-100 p-2">
-      <div className="animate-fade-in mx-auto w-full max-w-md">
+      <div className="mx-auto w-full max-w-md animate-fade-in">
         <Card className="relative overflow-hidden border-0 bg-white/95 shadow-2xl backdrop-blur-sm">
           {/* Subtle background decoration */}
           <div className="bg-primary/5 absolute right-0 top-0 h-32 w-32 -translate-y-16 translate-x-16 rounded-full" />
@@ -77,9 +80,10 @@ const AccessCodeEntry = () => {
             <div className="to-primary/90 mx-auto flex h-20 w-20 animate-pulse items-center justify-center rounded-full bg-gradient-to-br from-primary shadow-lg">
               <Lock className="h-10 w-10 text-white" />
             </div>
+
             <div className="space-y-2">
               <CardTitle className="flex items-center justify-center gap-2 text-3xl font-bold text-gray-900">
-                Welcome to GOATs
+                Welcome to GOAT
                 <Sparkles className="text-brand-lime h-6 w-6 animate-pulse" />
               </CardTitle>
               <CardDescription className="text-lg text-gray-600">
@@ -196,13 +200,7 @@ const AccessCodeEntry = () => {
                 <p className="text-sm text-gray-600">
                   Don&apos;t have a code?{' '}
                   <button
-                    onClick={() =>
-                      toast({
-                        title: 'Support Team',
-                        description:
-                          'Our VIP support team will assist you shortly.',
-                      })
-                    }
+                    onClick={() => openInNewTab('https://discord.gg/pGzpYGuM')}
                     className="text-brand-lime hover:text-brand-lime-dark font-medium underline underline-offset-2 transition-colors duration-200 hover:underline-offset-4"
                   >
                     Join our discord

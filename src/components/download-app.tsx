@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 
+import Image from 'next/image';
+
 import { Download, QrCode, Smartphone, Sparkles, Star } from 'lucide-react';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -11,12 +13,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 
 import PWAInstallButton from './onboarding/pwa-install-button';
 
@@ -134,7 +130,9 @@ const DownloadScreen = () => {
               <SwiperSlide key={screen.id} className="!w-80">
                 <Card className="hover:shadow-3xl group transform overflow-hidden rounded-3xl border-0 bg-white/95 shadow-2xl backdrop-blur-sm transition-all duration-500 hover:scale-105">
                   <div className="relative aspect-[9/16] overflow-hidden">
-                    <img
+                    <Image
+                      width={400}
+                      height={700}
                       src={screen.image}
                       alt={screen.title}
                       className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"

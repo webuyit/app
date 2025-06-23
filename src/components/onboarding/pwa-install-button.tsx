@@ -80,7 +80,7 @@ export default function PWAInstallButton() {
         className="rounded-lg bg-blue-600 px-6 py-3 text-white shadow-md"
       >
         <Download className="mr-1 h-6 w-6 group-hover:animate-bounce" />
-        Install GOAT
+        Add to Home Screen
       </Button>
 
       {/* ✅ This now works because JSX types are globally declared */}
@@ -113,7 +113,7 @@ export default function PWAInstallButton() {
           <div className="space-y-6 pt-4">
             <p className="text-center leading-relaxed text-gray-600">
               GOAT is designed exclusively for mobile devices right now. To
-              enjoy dynamic athlete predictions and PvP tournaments
+              enjoy dynamic athlete predictions and PvP tournamentss
             </p>
 
             {/* QR Code Placeholder */}

@@ -38,16 +38,16 @@ export const metadata: Metadata = {
     'Chiliz fan token',
     'crypto betting',
   ],
-  metadataBase: new URL('https://yourappdomain.com'),
+  metadataBase: new URL('https://app.mygoat.fun'),
   openGraph: {
     title: 'GOAT — Predict the Game Within the Game',
     description:
       'Join GOAT — the ultimate Web3 platform for athlete-focused PvP predictions. Bet on what your favorite players will do next.',
-    url: 'https://yourappdomain.com',
+    url: 'https://app.mygoat.fun',
     siteName: 'GOAT',
     images: [
       {
-        url: '/og-image.jpg', // Make sure this exists in /public
+        url: '/img/og.png', // Make sure this exists in /public
         width: 1200,
         height: 630,
         alt: 'GOAT — Predict the Game Within the Game',
@@ -61,12 +61,12 @@ export const metadata: Metadata = {
     title: 'GOAT — Predict the Game Within the Game',
     description:
       'Bet on your favorite athletes using Web3. Join private or public tournaments and compete with your fan tokens.',
-    images: ['/og-image.jpg'],
-    creator: '@goatapp', // your Twitter handle
+    images: ['/img/og.png'],
+    creator: '@goat_w3', // your Twitter handle
   },
   icons: {
     icon: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
+    apple: '/apple-icon.png',
   },
 };
 
@@ -82,7 +82,6 @@ export default function RootLayout({
           <PrivyProviderComp>
             <TooltipProvider>{children}</TooltipProvider>
           </PrivyProviderComp>
-
           <Toaster />
         </body>
       </html>

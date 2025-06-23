@@ -1,5 +1,6 @@
 import React from 'react';
 
+import PWAStandaloneGuard from '@/components/PWAStandaloneGuard';
 import Explore from '@/components/explore/explore';
 import { SERVER_URL } from '@/lib/constants';
 import { MARKETS, PLAYERS, TOURNAMENTS } from '@/types/types';
@@ -30,7 +31,9 @@ export default async function page() {
     ]);
   return (
     <div>
-      <Explore players={players.players} markets={markets.markets} />
+      <PWAStandaloneGuard>
+        <Explore players={players.players} markets={markets.markets} />
+      </PWAStandaloneGuard>
     </div>
   );
 }
