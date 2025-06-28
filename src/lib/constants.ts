@@ -106,3 +106,21 @@ export const socialLinks = [
   { name: 'Telegram', icon: FaTelegram, color: '#0088CC', href: '#' },
   { name: 'Website', icon: FaGlobe, color: '#6B7280', href: '#' },
 ];
+
+export const tutorials = [
+  {
+    title: 'Whats GOAT?',
+    cover: '/img/step-1.png',
+    href: '/learn/what-is-goat',
+  },
+  {
+    title: 'Whats Tournaments?',
+    cover: '/img/compete.png',
+    href: '/learn/tournaments',
+  },
+  {
+    title: 'Whats PvP?',
+    cover: '/img/compete.png',
+    href: '/learn/pvp',
+  },
+];
