@@ -1,9 +1,13 @@
 import dynamic from 'next/dynamic';
 import { notFound } from 'next/navigation';
 
-export default async function Page({ params }: { params: { slug: string } }) {
-  //const slug =  params.slug;
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
+  //const { slug } = await params;
 
   console.log('slug is', slug);
   try {
