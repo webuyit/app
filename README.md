@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Video Pitch [Youtube](https://www.youtube.com/watch?v=6-Kkj0T9ynk) 
 
-## Getting Started
+# GOAT is a gamified, social betting layer built for true sports lovers. It turns raw passion into action. Bet with friends, back your instincts, and feel every moment like never before.
 
-First, run the development server:
+GOAT is a PvP (player vs player) betting platform where fans don’t just bet on teams — they trade athlete performance. You place picks on any real player actions. From goals to Knockouts.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+It’s permissionless — meaning anyone can create a market and let others join in. No house. No limits. Just fans betting on greatness.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🪙 What is Chaser?
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Chaser is the in-app currency used to bet on athletes.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Here’s how it works:
 
-## Learn More
+- Swap your fan tokens into Chaser instantly
 
-To learn more about Next.js, take a look at the following resources:
+- Use **Chaser** to enter markets and place bets
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- You can swap back anytime to your original token (like $CHZ or any supported asset)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Chaser is your game-ready currency — swap in, bet big, cash out.
 
-## Deploy on Vercel
+![GOAT Banner](/img/ratio.png)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📈 What are Markets?
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+A Market is a bet on a specific player stat or event.
+
+### It can look like:
+
+- ⚽ Will Mbappé score 2 goals in the first half? → Yes / No
+
+- 🆚 Who scores first: Haaland or Mbappé? → Player Duel
+
+- 🏀 Will LeBron make the next free throw? → Live Market
+
+Each market has 2 or more outcomes. You choose your side using Chasers (our in-app betting token).
+
+If your prediction is correct when the market closes — you win the pot. If you're wrong — your stake goes to the winners.
+
+
+### Tech stacks
+ - Nextjs for front-end
+ - tailwind for styling
+ - shadcdn compoentns
+ - solidity for smart contracts
+ - privy for wallet connect
+ - postgress for database
+ - nodejs and express for back-end
+
