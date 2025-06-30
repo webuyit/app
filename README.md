@@ -33,7 +33,7 @@ Chaser is the in-app currency used to bet on athletes.
 
 ### Chaser is your game-ready currency — swap in, bet big, cash out.
 
-![GOAT Banner]("https://i.ibb.co/Y4r63z8w/Untitled-design-7.png")
+![GOAT Banner](https://i.ibb.co/Y4r63z8w/Untitled-design-7.png)
 
 ## 📈 What are Markets?
 
