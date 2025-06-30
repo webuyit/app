@@ -19,22 +19,6 @@ Understand the key concepts that power the GOAT platform — a new way to gamify
 GOAT is a gamified, social betting layer built for true sports lovers. It turns raw passion into action. Bet with friends, back your instincts, and feel every moment like never before.
 It’s permissionless — meaning anyone can create a market and let others join in. No house. No limits. Just fans betting on greatness.
 
-## 🪙 What is Chaser?
-
-Chaser is the in-app currency used to bet on athletes.
-
-### Here’s how it works:
-
-- Swap your fan tokens into Chaser instantly
-
-- Use **Chaser** to enter markets and place bets
-
-- You can swap back anytime to your original token (like $CHZ or any supported asset)
-
-### Chaser is your game-ready currency — swap in, bet big, cash out.
-
-![GOAT Banner](https://i.ibb.co/Y4r63z8w/Untitled-design-7.png)
-
 ## 📈 What are Markets?
 
 A Market is a bet on a specific player stat or event.
@@ -50,6 +34,23 @@ A Market is a bet on a specific player stat or event.
 Each market has 2 or more outcomes. You choose your side using Chasers (our in-app betting token).
 
 If your prediction is correct when the market closes — you win the pot. If you're wrong — your stake goes to the winners.
+
+## 🪙 What is Chaser?
+
+In-app stable token to bridge all FanTokens.
+
+### Here’s how it works:
+
+- Swap your fan tokens into Chaser instantly
+
+- Use **Chaser** to enter markets and place bets
+
+- You can swap back anytime to your original token (like $CHZ or any supported asset)
+
+### Chaser is your game-ready currency — swap in, bet big, cash out.
+
+![GOAT Banner](https://i.ibb.co/Y4r63z8w/Untitled-design-7.png)
+
 
 ## 🚀 Project Roadmap
 
