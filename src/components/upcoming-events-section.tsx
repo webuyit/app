@@ -14,24 +14,31 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { SERVER_URL } from '@/lib/constants';
 import { formatToRelativeShort } from '@/lib/format-dates';
 import { formatNumberCompact } from '@/lib/format-number-compact';
-import { MARKET } from '@/types/types';
+import { MARKET, MARKETS } from '@/types/types';
 
 import { BettingDrawer, sampleBetMarket } from './betting-drawer';
 
 type Props = {
-  events: MARKET[];
+  initialEvevents: MARKETS;
 };
-export function UpcomingEventsSection({ events }: Props) {
-  /* const { data: events = [] } = useQuery({
-    queryKey: ['/api/events/upcoming'],
+export function UpcomingEventsSection({ initialEvevents }: Props) {
+  const { data: response } = useQuery({
+    queryKey: [`markets`],
     queryFn: async () => {
-      const res = await fetch('http://localhost:5000/api/events/upcoming');
-      if (!res.ok) throw new Error('Network error');
+      const res = await fetch(`${SERVER_URL}markets/basic?limit=10`);
       return res.json();
     },
-  });*/
+    initialData: initialEvevents,
+    refetchInterval: 30_000, // every 30 seconds
+    refetchOnWindowFocus: false, // don't refetch when switching tabs (unless needed)
+    staleTime: 29_000, // prevents too-frequent re-fetching
+    refetchIntervalInBackground: false,
+  });
+
+  const events = response?.markets ?? [];
   // console.log('Events', events[0].Match);
   const formatBettorsCount = (count: number) => {
     if (count >= 1000) {

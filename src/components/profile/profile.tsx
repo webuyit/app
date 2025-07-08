@@ -544,7 +544,7 @@ export default function Profile() {
           </TabsContent>
         </Tabs>
       </div>
-      <InitUserClient />
+
       <BottomNavigation />
     </div>
   );

@@ -29,21 +29,22 @@ export function PopularBetsSection({ initialMarkets }: MarketsProps) {
       return res.json();
     },
     initialData: initialMarkets,
+    refetchInterval: 30_000, // every 30 seconds
+    refetchOnWindowFocus: false, // don't refetch when switching tabs (unless needed)
+    staleTime: 29_000, // prevents too-frequent re-fetching
+    refetchIntervalInBackground: false,
   });
 
   //console.log('markets from pupular bets section', markets);
   const formatTotalLocked = (amount: string) => {
     const num = parseFloat(amount);
     if (num >= 1000) {
-      return `${(num / 1000).toFixed(1)}K`;
+      return `${(num / 1000).toFixed(2)}K`;
     }
     return `${num.toFixed(0)}`;
   };
 
   const markets = response?.markets ?? [];
-  console.log('markets 4x5', markets);
-
-  console.log('Initial markets', initialMarkets);
 
   return (
     <section className="px-4 py-4">

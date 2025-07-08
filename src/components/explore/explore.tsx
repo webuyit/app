@@ -309,7 +309,6 @@ export default function Explore({ players, markets }: Props) {
           </div>
         )}
       </div>
-      <InitUserClient />
       <BottomNavigation />
     </div>
   );

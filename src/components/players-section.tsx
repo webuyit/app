@@ -1,5 +1,6 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
 import { Check, Clock } from 'lucide-react';
 import { useTransitionRouter } from 'next-view-transitions';
 // Import Swiper styles
@@ -7,15 +8,32 @@ import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { PLAYER } from '@/types/types';
+import { SERVER_URL } from '@/lib/constants';
+import { useUserStore } from '@/lib/stores/useUserStore';
+import { PLAYER, PLAYERS } from '@/types/types';
+import { User } from '@/types/user';
 
 type PlayerProps = {
-  players: PLAYER[];
+  initialPlayers: PLAYERS;
 };
-export function PlayersSection({ players }: PlayerProps) {
+export function PlayersSection({ initialPlayers }: PlayerProps) {
   const router = useTransitionRouter();
+  const user = useUserStore<User>((s) => s.user);
+  const stats = useUserStore((s) => s.stats);
 
-  console.log('Players', players);
+  const { data: response } = useQuery({
+    queryKey: [`players`],
+    queryFn: async () => {
+      const res = await fetch(`${SERVER_URL}players/basic?limit=20`);
+      return res.json();
+    },
+    initialData: initialPlayers,
+    refetchInterval: 80_000, // every 30 seconds
+    refetchOnWindowFocus: false, // don't refetch when switching tabs (unless needed)
+    staleTime: 79_000, // prevents too-frequent re-fetching
+    refetchIntervalInBackground: false,
+  });
+  const players = response?.players ?? [];
   const handlePlayerClick = (playerId: number) => {
     router.push(`/players/${playerId}`);
   };

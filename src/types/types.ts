@@ -59,10 +59,13 @@ export interface PLAYER {
   mainColor: string;
   profilePicture: string;
   category: string;
+  age: number;
   team: TEAM;
   nationality: NATIONALITY;
   createdAt: Date;
   verified?: boolean;
+  independent?: boolean;
+  markets: MARKET[];
 }
 
 export interface MATCH {
@@ -244,6 +247,7 @@ export interface UserStore {
   stats: UserStats;
   setUser: (userData: { user: UserProfile; stats: UserStats }) => void;
   clearUser: () => void;
+  setStats: (stats: UserStats) => void;
 }
 
 /*

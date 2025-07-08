@@ -599,7 +599,6 @@ export default function MyBets() {
           </TabsContent>
         </Tabs>
       </div>
-      <InitUserClient />
       <BottomNavigation />
     </div>
   );

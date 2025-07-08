@@ -152,8 +152,6 @@ type Props = {
   tournaments: TOURNAMENT[];
 };
 export function TournamentsSection({ tournaments }: Props) {
-  console.log('Tournaments', tournaments);
-
   const filteredTournaments = tournaments.filter(
     (market) => market.entryType !== 'GATED',
   );

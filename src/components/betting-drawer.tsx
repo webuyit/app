@@ -42,7 +42,9 @@ import {
   OutcomeWithSimulation,
   simulateOddsWithUserStake,
 } from '@/lib/odds-calculator';
+import { useUserStore } from '@/lib/stores/useUserStore';
 import { OUTCOME } from '@/types/types';
+import { User } from '@/types/user';
 
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
@@ -83,7 +85,7 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
   const [stakeAmount, setStakeAmount] = useState<string>('');
   const [isOpen, setIsOpen] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-
+  const user = useUserStore<User>((s) => s.user);
   // initialize client
 
   const queryClient = useQueryClient();
@@ -133,32 +135,6 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
     }
   };
 
-  const handlePlaceBet = () => {
-    if (!selectedOutcome || !stakeAmount) return;
-
-    // Here you would integrate with your betting API
-    console.log('Placing bet:', {
-      marketId: market.id,
-      outcomeId: selectedOutcome,
-      stake: stakeAmount,
-      potentialPayout,
-    });
-
-    //setIsOpen(false);
-    // Reset form
-    //setSelectedOutcome(null);
-    //setStakeAmount('');
-
-    // Simulate swap process
-    setShowSuccess(true);
-    setTimeout(() => {
-      setShowSuccess(false);
-      setIsOpen(false);
-      setStakeAmount('');
-      setSelectedOutcome(null);
-    }, 7000);
-  };
-
   // handle place bet 2
 
   const mutation = useMutation({
@@ -197,15 +173,12 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
       )
     : market.outcomes;
 
-  console.log('display outcomes', displayOutcomes);
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   //@ts-expect-error
   const selected: OutcomeWithSimulation = displayOutcomes.find(
     (o) => o.id === selectedOutcome,
   );
 
-  console.log('outcomes is', displayOutcomes);
-  console.log('selected outcomes', selected);
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
@@ -528,7 +501,7 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
                       onClick={() =>
                         mutation.mutate({
                           amount: Number(stakeAmount),
-                          userId: DEMO_USER,
+                          userId: user.id,
                           outcomeId: selectedOutcome!,
                         })
                       }

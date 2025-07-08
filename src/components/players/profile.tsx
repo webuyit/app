@@ -1,6 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import {
+  JSXElementConstructor,
+  Key,
+  ReactElement,
+  ReactNode,
+  ReactPortal,
+  useState,
+} from 'react';
 import { use } from 'react';
 
 import { useParams } from 'next/navigation';
@@ -42,6 +49,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { formatNumberCompact } from '@/lib/format-number-compact';
+import { getHighestOdds } from '@/lib/getHighestOdds';
+import { MARKET, PLAYER } from '@/types/types';
+
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 
 interface PlayerStats {
   goals?: number;
@@ -84,7 +96,7 @@ interface League {
   prize?: string;
 }
 
-interface Player {
+/*interface Player {
   id: number;
   name: string;
   age: number;
@@ -99,15 +111,19 @@ interface Player {
   leagues: League[];
   isFollowing?: boolean;
   followers: number;
-}
+}*/
 
-export default function PlayerProfile() {
+type Props = {
+  player: PLAYER;
+};
+
+export default function PlayerProfile({ player }: Props) {
   const [isFollowing, setIsFollowing] = useState(false);
   const params = useParams();
   const playerId = params.playerId;
   const router = useTransitionRouter();
   // Get player data based on ID
-  const getPlayerData = (id: string): Partial<Player> => {
+  const getPlayerData = (id: string): Partial<PLAYER> => {
     const players = {
       '1': {
         id: 1,
@@ -165,6 +181,7 @@ export default function PlayerProfile() {
       },
     };
 
+    //@ts-ignore
     return players[id as keyof typeof players] || players['1'];
   };
 
@@ -172,7 +189,6 @@ export default function PlayerProfile() {
     Array.isArray(playerId) ? playerId[0] : playerId || '1',
   );
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   //@ts-expect-error
   const mockPlayer: Player = {
     ...basePlayerData,
@@ -183,6 +199,7 @@ export default function PlayerProfile() {
       { date: 'Apr', value: 25, label: 'Points' },
       { date: 'May', value: 29, label: 'Points' },
       { date: 'Jun', value: 33, label: 'Points' },
+      { date: 'Jul', value: 28, label: 'Points' },
     ],
     markets: [
       {
@@ -279,9 +296,15 @@ export default function PlayerProfile() {
     }
   };
 
+  /*   FOOTBALL
+  BASEBALL
+  TENNIS
+  ESPORT
+  BASKETBALL*/
+
   const getComparisonData = (sport: string, playerStats: PlayerStats) => {
     switch (sport.toLowerCase()) {
-      case 'basketball':
+      case 'BASKETBALL':
         return [
           {
             stat: 'Points',
@@ -292,7 +315,7 @@ export default function PlayerProfile() {
           { stat: 'Rebounds', player: 7.3, league: 6.8 },
           { stat: 'Efficiency', player: 28.5, league: 19.1 },
         ];
-      case 'football':
+      case 'FOOTBALL':
         return [
           { stat: 'Goals', player: playerStats.goals || 0, league: 12.5 },
           { stat: 'Assists', player: playerStats.assists || 0, league: 8.2 },
@@ -303,7 +326,7 @@ export default function PlayerProfile() {
             league: 6.8,
           },
         ];
-      case 'tennis':
+      case 'TENNIS':
         return [
           { stat: 'Aces', player: 8.5, league: 5.2 },
           { stat: 'Win %', player: playerStats.winRate || 0, league: 65 },
@@ -367,14 +390,14 @@ export default function PlayerProfile() {
           <div className="flex items-start space-x-4">
             <Avatar className="h-20 w-20">
               <AvatarImage
-                src={mockPlayer.imageUrl}
-                alt={mockPlayer.name}
+                src={player.profilePicture}
+                alt={player.name}
                 className="object-cover"
               />
               <AvatarFallback className="text-lg">
                 {mockPlayer.name
                   .split(' ')
-                  .map((n) => n[0])
+                  .map((n: string) => n[0])
                   .join('')}
               </AvatarFallback>
             </Avatar>
@@ -383,19 +406,19 @@ export default function PlayerProfile() {
               <div className="flex items-start justify-between">
                 <div>
                   <h2 className="mb-1 text-xl font-bold text-gray-900 dark:text-white">
-                    {mockPlayer.name}
+                    {player.name}
                   </h2>
                   <div className="space-y-1">
                     <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                       <Flag size={14} className="mr-2" />
-                      {mockPlayer.nationality}, {mockPlayer.age} years
+                      {player.nationality.name}, {player.age} years
                     </div>
                     <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                       <Users size={14} className="mr-2" />
                       {mockPlayer.team}
                     </div>
                     <Badge className="bg-primary/10 text-xs text-primary">
-                      {mockPlayer.category}
+                      {player.category}
                     </Badge>
                   </div>
                 </div>
@@ -421,7 +444,10 @@ export default function PlayerProfile() {
               </div>
 
               <div className="mt-3 text-sm text-gray-500 dark:text-gray-400">
-                {mockPlayer.followers} followers
+                {formatNumberCompact(mockPlayer.followers, {
+                  decimals: 1,
+                })}{' '}
+                followers
               </div>
             </div>
           </div>
@@ -431,7 +457,7 @@ export default function PlayerProfile() {
         <div className="border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="flex items-center text-lg font-semibold text-gray-900 dark:text-white">
-              {getStatIcon(mockPlayer.sport)}
+              {getStatIcon(player.category)}
               <span className="ml-2">Performance</span>
             </h3>
             <Badge variant="outline" className="text-xs">
@@ -600,36 +626,36 @@ export default function PlayerProfile() {
           <div className="mb-4 flex items-center justify-between">
             <h3 className="flex items-center text-lg font-semibold text-gray-900 dark:text-white">
               <Target size={18} className="mr-2 text-primary" />
-              Live Markets ({mockPlayer.markets.length})
+              Live Markets ({player.markets.length})
             </h3>
           </div>
 
           <div className="space-y-3">
-            {mockPlayer.markets.map((market) => (
+            {player.markets.map((market: MARKET) => (
               <Card
                 key={market.id}
                 className="transition-shadow hover:shadow-md"
               >
                 <CardContent className="p-4">
                   <div className="mb-3">
-                    <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
+                    <h4 className="mb-1 text-sm font-semibold capitalize text-gray-900 dark:text-white">
                       {market.title}
                     </h4>
-                    <p className="mb-2 text-xs text-gray-600 dark:text-gray-400">
+                    <p className="mb-2 text-xs capitalize text-gray-600 dark:text-gray-400">
                       {market.description}
                     </p>
                     <div className="flex items-center space-x-4 text-xs text-gray-500">
                       <div className="flex items-center">
                         <TrendingUp size={10} className="mr-1" />
-                        {market.odds}
+                        {getHighestOdds(market.outcomes)}
                       </div>
                       <div className="flex items-center">
                         <DollarSign size={10} className="mr-1" />
-                        {market.tvl}
+                        {market.totalPools}
                       </div>
                       <div className="flex items-center">
                         <Users size={10} className="mr-1" />
-                        {market.participants}
+                        400
                       </div>
                     </div>
                   </div>
@@ -641,11 +667,11 @@ export default function PlayerProfile() {
                       title: market.title,
                       description: market.description,
                       player: {
-                        name: mockPlayer.name,
-                        imageUrl: mockPlayer.imageUrl,
-                        sport: mockPlayer.sport,
+                        name: player.name,
+                        imageUrl: player.profilePicture,
+                        sport: player.category,
                       },
-                      tvl: market.tvl,
+                      tvl: formatNumberCompact(market.totalPools),
                       outcomes: market.outcomes,
                     }}
                     trigger={
@@ -665,7 +691,7 @@ export default function PlayerProfile() {
         </div>
 
         {/* Leagues Involved */}
-        <div className="bg-white p-4 dark:bg-gray-800">
+        <div className="hidden bg-white p-4 dark:bg-gray-800">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="flex items-center text-lg font-semibold text-gray-900 dark:text-white">
               <Trophy size={18} className="mr-2 text-primary" />
@@ -673,7 +699,9 @@ export default function PlayerProfile() {
             </h3>
           </div>
 
-          <div className="space-y-3">
+          <div className="hidden space-y-3">
+            {}
+            {/*@ts-ignore   */}
             {mockPlayer.leagues.map((league) => (
               <Card
                 key={league.id}
