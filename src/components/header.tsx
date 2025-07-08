@@ -10,21 +10,25 @@ import { COIN_URL } from '@/lib/constants';
 export function Header() {
   return (
     <header className="sticky top-0 z-40 flex items-center justify-between bg-white px-4 py-3 shadow-sm">
-      <div className="flex items-center space-x-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
-          <Trophy className="text-white" size={16} />
-        </div>
+      <div className="flex items-center space-x-1.5">
+        <Image
+          src={`/img/logo.png`}
+          width={40}
+          height={40}
+          alt="logo"
+          className="h-8 w-8 rounded-full"
+        />
         <div>
-          <h1 className="font-semibold text-gray-900">GOATs Arena</h1>
+          <h1 className="font-semibold text-gray-900">GOAT</h1>
           <div className="flex items-center gap-0.5">
             <Image
-              src={`/img/coin.svg`}
+              src={`/img/coin.png`}
               width={15}
               height={15}
               alt="currency"
               className=""
             />
-            <p className="text-xs text-gray-500">2,450.00</p>
+            <p className="text-xs text-muted-foreground">2,450.00</p>
           </div>
         </div>
       </div>

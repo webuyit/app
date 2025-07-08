@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+import Image from 'next/image';
+
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowBigDown,
@@ -305,7 +307,7 @@ export function ChaserSwapDrawer({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="space-y-6 p-6"
+                className="space-y-6 px-2 py-6"
               >
                 {/* Header */}
 

@@ -257,7 +257,7 @@ export default function Profile() {
                   </Button>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Avatar className="h-8 w-8">
+                  <Avatar className="h-7 w-7">
                     <AvatarImage src={CHILIZ_LOGO} alt="Profile" />
                     <AvatarFallback className="bg-primary text-xl font-bold text-white">
                       JD
@@ -285,7 +285,7 @@ export default function Profile() {
                     <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-full">
                       <Coins size={20} className="hidden text-primary" />
                       <Image
-                        src={`/img/coin.svg`}
+                        src={`/img/coin.png`}
                         width={20}
                         height={20}
                         alt="currency"
@@ -386,7 +386,7 @@ export default function Profile() {
                     checked={isDarkMode}
                     onCheckedChange={toggleTheme}
                     className="data-[state=checked]:bg-primary"
-                    disabled={true}
+                    disabled={false}
                   />
                 </div>
               </CardContent>

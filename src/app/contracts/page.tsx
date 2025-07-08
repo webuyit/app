@@ -6,9 +6,9 @@ import MyBets from '@/components/contracts/contracts';
 export default function page() {
   return (
     <div>
-      <PWAStandaloneGuard>
-        <MyBets />
-      </PWAStandaloneGuard>
+      {/*<PWAStandaloneGuard>*/}
+      <MyBets />
+      {/*</PWAStandaloneGuard>*/}
     </div>
   );
 }

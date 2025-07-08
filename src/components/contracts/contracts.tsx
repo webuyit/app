@@ -29,6 +29,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import InitUserClient from '../initUserClient';
+import { PreMarketBetShareCard } from '../pre-market-bet-share';
 
 // Mock data for bets
 const mockPremarketBets = [
@@ -45,7 +46,9 @@ const mockPremarketBets = [
     odds: '+150',
     stake: '50.00',
     potentialWin: '125.00',
+    date: 'Today, 8:00 PM',
     gameTime: '8:00 PM EST',
+    oppenent: 'vs Warriors',
     opponent: 'vs Warriors',
   },
   {
@@ -61,7 +64,9 @@ const mockPremarketBets = [
     odds: '+125',
     stake: '75.00',
     potentialWin: '168.75',
+    date: 'Today, 1:00 PM',
     gameTime: '1:00 PM EST',
+    oppenent: 'vs Saints',
     opponent: 'vs Saints',
   },
   {
@@ -77,7 +82,9 @@ const mockPremarketBets = [
     odds: '+200',
     stake: '25.00',
     potentialWin: '75.00',
+    date: 'Today, 2:00 PM',
     gameTime: '2:00 PM EST',
+    oppenent: 'vs Osaka',
     opponent: 'vs Osaka',
   },
 ];
@@ -275,9 +282,30 @@ export default function MyBets() {
                         <h3 className="font-semibold text-gray-900">
                           {bet.player.name}
                         </h3>
-                        <Badge variant="outline" className="text-xs">
-                          {bet.odds}
-                        </Badge>
+                        <div>
+                          <Badge variant="outline" className="text-xs">
+                            {bet.odds}
+                          </Badge>
+
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0 text-gray-500 hover:text-primary"
+                              >
+                                <Share2 size={14} />
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-md">
+                              <DialogHeader>
+                                <DialogTitle>Share Your Bet Result</DialogTitle>
+                              </DialogHeader>
+
+                              <PreMarketBetShareCard bet={bet} />
+                            </DialogContent>
+                          </Dialog>
+                        </div>
                       </div>
                       <p className="text-sm text-gray-600">
                         {bet.player.team} {bet.opponent}

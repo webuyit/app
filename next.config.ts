@@ -5,7 +5,15 @@ import createMDX from '@next/mdx';
 const nextConfig: NextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
   images: {
-    remotePatterns: [new URL('https://pbs.twimg.com/profile_images/**')],
+    remotePatterns: [
+      new URL('https://pbs.twimg.com/profile_images/**'),
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        //pathname: '/images/**',
+      },
+    ],
   },
 };
 

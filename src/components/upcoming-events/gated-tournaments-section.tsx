@@ -156,8 +156,8 @@ export function GatedTournamentsSection({ tournaments }: Props) {
     (market) => market.entryType === 'GATED',
   );
 
-  console.log('Filtered tournaments', filteredTournaments);
-  console.log('Tournaments', tournaments);
+  //console.log('Filtered tournaments', filteredTournaments);
+  //console.log('Tournaments', tournaments);
 
   const formatParticipants = (count: number) => {
     if (count >= 1000) {

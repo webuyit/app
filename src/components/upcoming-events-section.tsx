@@ -26,7 +26,7 @@ export function UpcomingEventsSection({ events }: Props) {
       return res.json();
     },
   });*/
-  console.log('Events', events[0].Match);
+  // console.log('Events', events[0].Match);
   const formatBettorsCount = (count: number) => {
     if (count >= 1000) {
       return `${(count / 1000).toFixed(1)}K`;

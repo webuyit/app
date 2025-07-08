@@ -156,8 +156,8 @@ export function TournamentsSection({ tournaments }: Props) {
     (market) => market.entryType !== 'GATED',
   );
 
-  console.log('Filtered tournaments', filteredTournaments);
-  console.log('Tournaments', tournaments);
+  // console.log('Filtered tournaments', filteredTournaments);
+  //console.log('Tournaments', tournaments);
   /*useEffect(() => {
     if (
       typeof window !== 'undefined' &&

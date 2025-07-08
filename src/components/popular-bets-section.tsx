@@ -2,7 +2,9 @@
 
 import { useEffect, useRef } from 'react';
 
-import { useQuery } from '@tanstack/react-query';
+import { Manjari } from 'next/font/google';
+
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 // Import Swiper styles
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -11,29 +13,37 @@ import { BettingDrawer, sampleBetMarket } from '@/components/betting-drawer';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { MARKET } from '@/types/types';
+import { SERVER_URL } from '@/lib/constants';
+import { formatNumberCompact } from '@/lib/format-number-compact';
+import { getHighestOdds } from '@/lib/getHighestOdds';
+import { MARKET, MARKETS } from '@/types/types';
 
 type MarketsProps = {
-  markets: MARKET[];
+  initialMarkets: MARKETS;
 };
-export function PopularBetsSection({ markets }: MarketsProps) {
-  /*const { data: bets = [] } = useQuery({
-    queryKey: [`api/bets/popular`],
+export function PopularBetsSection({ initialMarkets }: MarketsProps) {
+  const { data: response } = useQuery({
+    queryKey: [`markets`],
     queryFn: async () => {
-      const res = await fetch('http://localhost:5000/api/bets/popular');
-      if (!res.ok) throw new Error('Network error');
+      const res = await fetch(`${SERVER_URL}markets/basic?limit=10`);
       return res.json();
     },
-  });*/
+    initialData: initialMarkets,
+  });
 
-  console.log('markets from pupular bets section', markets[0].players[0]);
+  //console.log('markets from pupular bets section', markets);
   const formatTotalLocked = (amount: string) => {
     const num = parseFloat(amount);
     if (num >= 1000) {
-      return `$${(num / 1000).toFixed(1)}K`;
+      return `${(num / 1000).toFixed(1)}K`;
     }
-    return `$${num.toFixed(0)}`;
+    return `${num.toFixed(0)}`;
   };
+
+  const markets = response?.markets ?? [];
+  console.log('markets 4x5', markets);
+
+  console.log('Initial markets', initialMarkets);
 
   return (
     <section className="px-4 py-4">
@@ -81,14 +91,22 @@ export function PopularBetsSection({ markets }: MarketsProps) {
                       </h3>
                       <div className="flex items-center space-x-1">
                         <div className="flex h-4 w-4 items-center justify-center rounded bg-gray-200">
-                          <span className="text-xs font-bold text-gray-600">
-                            {bet.players[0]?.player?.team?.name
-                              ? bet.players[0]?.player?.team?.name?.substring(
-                                  0,
-                                  1,
-                                )
-                              : 'G'}
-                          </span>
+                          <div className="text-xs font-bold text-gray-600">
+                            <Avatar className="h-5 w-5">
+                              <AvatarImage
+                                src={bet.players[0]?.player.team.logo}
+                                alt={bet.players[0]?.player.team.name}
+                                className="object-cover"
+                              />
+                              <AvatarFallback className="text-xs">
+                                {bet.players[0]?.player?.team.name
+                                  ?.split(' ')
+                                  .map((n: string) => n[0])
+                                  .join('')
+                                  .substring(0, 2)}
+                              </AvatarFallback>
+                            </Avatar>
+                          </div>
                         </div>
                         <span className="text-xs text-gray-500">
                           {bet.players[0]?.player?.team?.name}
@@ -100,8 +118,24 @@ export function PopularBetsSection({ markets }: MarketsProps) {
                     <div className="mb-1 text-xs text-gray-500">
                       Total Locked
                     </div>
-                    <div className="text-sm font-semibold text-gray-900">
-                      {formatTotalLocked('2000')}
+                    <div className="flex items-center space-x-0">
+                      <Avatar className="h-4 w-4">
+                        <AvatarImage
+                          src={`/img/coin.png`}
+                          alt={'coin'}
+                          className="object-cover"
+                        />
+                        <AvatarFallback className="text-xs">
+                          {bet.players[0]?.player?.name
+                            ?.split(' ')
+                            .map((n: string) => n[0])
+                            .join('')
+                            .substring(0, 2)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="text-sm font-semibold text-gray-900">
+                        {formatTotalLocked(bet.totalPools.toString())}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -117,7 +151,7 @@ export function PopularBetsSection({ markets }: MarketsProps) {
                   <div className="flex items-center space-x-1">
                     <span className="text-xs text-gray-500">Odds:</span>
                     <span className="text-sm font-semibold text-primary">
-                      {'2'}
+                      {getHighestOdds(bet.outcomes)}
                     </span>
                   </div>
                   <BettingDrawer
@@ -133,8 +167,9 @@ export function PopularBetsSection({ markets }: MarketsProps) {
                           '/api/placeholder/64/64',
                         sport: bet.players[0]?.player?.category || 'Sports',
                       },
-                      tvl: formatTotalLocked('3000'),
-                      outcomes: [
+                      tvl: formatTotalLocked(bet.totalPools.toString()),
+
+                      /*outcomes: [
                         {
                           id: 'yes',
                           label: 'Yes',
@@ -147,8 +182,8 @@ export function PopularBetsSection({ markets }: MarketsProps) {
                           odds: 2.2,
                           probability: 40,
                         },
-                      ],
-                      //outcomes : bet.outcomes
+                      ],*/
+                      outcomes: bet.outcomes,
                     }}
                     trigger={
                       <Button

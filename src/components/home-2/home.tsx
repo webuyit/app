@@ -31,7 +31,7 @@ export default function Home({ players, markets, tournaments }: HomeProps) {
       <div className="overflow-x-hidden">
         <AnnouncementCarousel />
         <PlayersSection players={players.players} />
-        <PopularBetsSection markets={markets.markets} />
+        <PopularBetsSection initialMarkets={markets} />
         <UpcomingEventsSection events={markets.markets} />
         <TournamentsSection tournaments={tournaments.tornaments} />
         <GatedTournamentsSection tournaments={tournaments.tornaments} />

@@ -127,6 +127,7 @@ export interface MARKET {
   players: Container[];
   outcomes: OUTCOME[];
   Match: MATCH;
+  totalPools: number;
 }
 
 export interface TOURNAMENT {
