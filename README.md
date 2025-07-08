@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Video Pitch [Youtube](https://www.youtube.com/watch?v=6-Kkj0T9ynk) 
 
-## Getting Started
+## 🧠 GOAT Platform Terminology
 
-First, run the development server:
+Understand the key concepts that power the GOAT platform — a new way to gamify fandom through PvP prediction markets.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+| Term               | Description |
+|--------------------|-------------|
+| **GOAT**           | The PvP betting layer built on **Chiliz**, designed to gamify sports fandom. |
+| **Markets**        | Player or stat-based prediction opportunities where fans place their bets. |
+| **Odds Logic**     | Powered by a **liquidity-based AMM**, adjusting odds dynamically based on user positions. |
+| **PvP Model**      | Fans bet **against each other**, not the house — fully peer-to-peer. |
+| **Chaser**         | The in-app stable unit (soft-dollar) that acts as a **bridge between all fan tokens**. |
+| **Tournaments**    | Competitive events based on points or wins with prizes, leaderboards, and more. |
+| **Tournament Types** | Includes **Gated**, **Private**, **Premium**, and **Open** formats — each with unique access rules. |
+| **Who Earns?**     | LPs (coming soon), market creators, the protocol itself, and referrers all get a share. |
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
+GOAT is a gamified, social betting layer built for true sports lovers. It turns raw passion into action. Bet with friends, back your instincts, and feel every moment like never before.
+It’s permissionless — meaning anyone can create a market and let others join in. No house. No limits. Just fans betting on greatness.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📈 What are Markets?
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+A Market is a bet on a specific player stat or event.
 
-## Learn More
+### It can look like:
 
-To learn more about Next.js, take a look at the following resources:
+- ⚽ Will Mbappé score 2 goals in the first half? → Yes / No
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- 🆚 Who scores first: Haaland or Mbappé? → Player Duel
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 🏀 Will LeBron make the next free throw? → Live Market
 
-## Deploy on Vercel
+Each market has 2 or more outcomes. You choose your side using Chasers (our in-app betting token).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+If your prediction is correct when the market closes — you win the pot. If you're wrong — your stake goes to the winners.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🪙 What is Chaser?
+
+In-app stable token to bridge all FanTokens.
+
+### Here’s how it works:
+
+- Swap your fan tokens into Chaser instantly
+
+- Use **Chaser** to enter markets and place bets
+
+- You can swap back anytime to your original token (like $CHZ or any supported asset)
+
+### Chaser is your game-ready currency — swap in, bet big, cash out.
+
+![GOAT Banner](https://i.ibb.co/Y4r63z8w/Untitled-design-7.png)
+
+
+## 🚀 Project Roadmap
+
+A high-level overview of the phased development plan for the GOAT platform.
+
+---
+
+### ✅ **Phase 1 — MVP & Ecosystem Validation**
+> *Goal: Build core features, validate the concept, and grow the community.*
+
+- 🏗️ Launch MVP with PvP betting functionalities.
+- 🧪 Enable free play on Testnet to onboard early users.
+- 🤝 Launch initial collaborations with projects in the Chiliz ecosystem.
+- 🧑‍🤝‍🧑 Focus on community growth, education, and engagement.
+- 🧩 Expand available markets by adding more players and bet types.
+
+---
+
+### 🔜 **Phase 2 — Mainnet & Feature Expansion**
+> *Goal: Transition to mainnet, introduce decentralized mechanisms, and enhance user experience.*
+
+- 🚀 Launch GOAT platform on Mainnet.
+- 📊 Introduce staking features for protocol participants.
+- 🔮 Integrate decentralized oracles for trustless data feeds.
+- 🛠️ Continue refining the user interface and gameplay experience.
+- 🎯 Launch exclusive tournaments, gated challenges, and fan-driven features.
+
+---
+
+_Stay tuned — more phases will be revealed as we grow together!_
+
+
+### Tech stacks
+ - Nextjs for front-end
+ - tailwind for styling
+ - shadcdn compoentns
+ - solidity for smart contracts
+ - privy for wallet connect
+ - postgress for database
+ - nodejs and express for back-end
+
