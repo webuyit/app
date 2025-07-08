@@ -8,6 +8,7 @@ import {
 export function formatToRelativeShort(dateStr: Date) {
   const now = new Date();
   const target = new Date(dateStr);
+  if (target <= now) return 'ENDED';
 
   if (target <= now) return '0h';
 

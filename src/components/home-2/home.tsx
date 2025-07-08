@@ -34,7 +34,12 @@ export default function Home({ players, markets, tournaments }: HomeProps) {
         <PopularBetsSection initialMarkets={markets} />
         <UpcomingEventsSection events={markets.markets} />
         <TournamentsSection tournaments={tournaments.tornaments} />
+
+        {/* REMOVE GATED TOURNAMENTS FOR NOW */}
+        {/*}
         <GatedTournamentsSection tournaments={tournaments.tornaments} />
+        */}
+
         <InitUserClient />
       </div>
       <BottomNavigation />

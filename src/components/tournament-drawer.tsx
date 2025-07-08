@@ -101,7 +101,7 @@ export function TournamentDrawer({
   const [activeTab, setActiveTab] = useState('markets');
   const [isSharing, setIsSharing] = useState(false);
   const leaderboardRef = useRef<HTMLDivElement>(null);
-
+  const IS_TOURNAMENTS_PAUSED = true;
   const getTournamentIcon = (type: string) => {
     switch (type) {
       case 'OPEN':
@@ -677,7 +677,8 @@ export function TournamentDrawer({
                   (tournament.type === 'PRIVATE' &&
                     tournament.status === 'invite') ||
                   (tournament.type === 'GATED' &&
-                    !hasTokenRequirement(tournament))
+                    !hasTokenRequirement(tournament)) ||
+                  IS_TOURNAMENTS_PAUSED
                 }
               >
                 {tournament.type === 'PREMIUM' && (

@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 
+import Image from 'next/image';
+
 import {
   Clock,
   Coins,
@@ -252,7 +254,7 @@ export function TournamentsSection({ tournaments }: Props) {
   };
 
   return (
-    <section className="px-4 py-4">
+    <section className="px-4 py-1">
       <div className="mb-3 flex items-center justify-between">
         <h2 className="text-lg font-semibold text-gray-900">Tournaments</h2>
         <Link href="/tournaments">
@@ -358,10 +360,12 @@ export function TournamentsSection({ tournaments }: Props) {
                       <div className="flex items-center space-x-2">
                         <div className="text-lg">
                           {tournament.requiredTokenLogoUrl ? (
-                            <img
+                            <Image
                               src={tournament.requiredTokenLogoUrl}
                               alt={tournament.requiredTokenSymbol}
                               className="h-4 w-4 rounded-full object-cover"
+                              width={100}
+                              height={100}
                             />
                           ) : (
                             '💎'

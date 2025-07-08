@@ -133,8 +133,6 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
     }
   };
 
-  console.log('selected outcome', selectedOutcome);
-  console.log('Stakes amount', stakeAmount);
   const handlePlaceBet = () => {
     if (!selectedOutcome || !stakeAmount) return;
 
@@ -199,6 +197,7 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
       )
     : market.outcomes;
 
+  console.log('display outcomes', displayOutcomes);
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   //@ts-expect-error
   const selected: OutcomeWithSimulation = displayOutcomes.find(
@@ -251,7 +250,7 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="space-y-6 px-2 py-6"
+                className="space-y-6 px-0.5 py-0"
               >
                 <DrawerHeader className="pb-4 text-center">
                   <Avatar className="mx-auto mb-3 h-16 w-16">
@@ -293,8 +292,8 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
                         <div className="mb-1 text-xs text-gray-500 dark:text-gray-400">
                           Total Value Locked
                         </div>
-                        <div className="flex items-center justify-center space-x-1 text-lg font-bold text-gray-900 dark:text-white">
-                          <Avatar className="h-4 w-4">
+                        <div className="flex items-center justify-center space-x-1.5 text-lg font-bold text-gray-900 dark:text-white">
+                          <Avatar className="h-5 w-5">
                             <AvatarImage
                               src={`/img/coin.png`}
                               alt={'coin'}

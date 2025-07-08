@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 
+import Image from 'next/image';
+
 import { useQuery } from '@tanstack/react-query';
 import { Clock, Flame, Star, Trophy, Users } from 'lucide-react';
 import { Link, useTransitionRouter } from 'next-view-transitions';
@@ -12,7 +14,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { formatToRelativeShort } from '@/lib/format-dates';
+import { formatNumberCompact } from '@/lib/format-number-compact';
 import { MARKET } from '@/types/types';
+
+import { BettingDrawer, sampleBetMarket } from './betting-drawer';
 
 type Props = {
   events: MARKET[];
@@ -34,6 +40,11 @@ export function UpcomingEventsSection({ events }: Props) {
     return count.toString();
   };
 
+  function formatTotalLocked(arg0: any): string {
+    throw new Error('Function not implemented.');
+  }
+
+  const now = new Date();
   return (
     <section className="px-4 py-4">
       <div className="mb-3 flex items-center justify-between">
@@ -60,22 +71,27 @@ export function UpcomingEventsSection({ events }: Props) {
           <SwiperSlide key={event.id} className="swiper-slide !w-64">
             <Card className="touch-feedback cursor-pointer overflow-hidden transition-shadow hover:shadow-md">
               <div className="relative">
-                <img
+                <Image
                   src={
                     event?.coverUrl || event.players[0]?.player.profilePicture
                   }
                   alt={event.title}
+                  width={700}
+                  height={500}
                   className="h-32 w-full object-cover"
                 />
                 <div className="absolute left-2 top-2 flex items-center space-x-1 rounded-full bg-black bg-opacity-70 px-2 py-1 text-xs text-white">
                   <Clock size={10} />
-                  <span>{'1d 4h'}</span>
+                  <span>{formatToRelativeShort(event.endsAt)}</span>
                 </div>
-                {event.status === 'LIVE' && (
-                  <Badge className="absolute right-2 top-2 animate-pulse bg-red-500 px-2 py-1 text-xs text-white">
-                    LIVE
-                  </Badge>
-                )}
+                {event.startsAt &&
+                  event.endsAt &&
+                  now >= new Date(event.startsAt) &&
+                  now <= new Date(event.endsAt) && (
+                    <Badge className="absolute right-2 top-2 animate-pulse bg-red-500 px-2 py-1 text-xs text-white">
+                      LIVE
+                    </Badge>
+                  )}
               </div>
               <CardContent className="p-4">
                 <h3 className="mb-1 text-sm font-semibold capitalize text-gray-900">
@@ -113,10 +129,36 @@ export function UpcomingEventsSection({ events }: Props) {
                   </div>
                   <Button
                     size="sm"
-                    className="hover:bg-primary/90 bg-primary px-3 py-1.5 text-xs text-white"
+                    className="hover:bg-primary/90 hidden bg-primary px-3 py-1.5 text-xs text-white"
                   >
                     Bet Now
                   </Button>
+
+                  <BettingDrawer
+                    market={{
+                      ...sampleBetMarket,
+                      id: `market-${event.id}`,
+                      title: event.title,
+                      description: event.description,
+                      player: {
+                        name: event.players[0].player?.name || 'Unknown Player',
+                        imageUrl:
+                          event.players[0]?.player?.profilePicture ||
+                          '/api/placeholder/64/64',
+                        sport: event.players[0]?.player?.category || 'Sports',
+                      },
+                      tvl: formatNumberCompact(event.totalPools),
+                      outcomes: event.outcomes,
+                    }}
+                    trigger={
+                      <Button
+                        size="sm"
+                        className="hover:bg-primary/90 bg-primary text-white"
+                      >
+                        Bet Now
+                      </Button>
+                    }
+                  />
                 </div>
               </CardContent>
             </Card>
