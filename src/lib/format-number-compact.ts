@@ -11,7 +11,7 @@ export function formatNumberCompact(
   value: number,
   {
     threshold = 1000,
-    decimals = 3,
+    decimals = 2,
     withSuffix = true,
     customSuffixes = {},
     useCommas = false,

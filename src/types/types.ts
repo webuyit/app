@@ -103,7 +103,7 @@ export interface MARKET {
   coverUrl: string;
   isHot: boolean;
   isFeatured: boolean;
-  category?: 'ESPORT' | 'FOOTBALL' | 'BASEBALL' | 'SOCCER' | 'FANTASY';
+  category: 'ESPORT' | 'FOOTBALL' | 'BASEBALL' | 'SOCCER' | 'FANTASY';
   status:
     | 'OPEN'
     | 'CLOSED'
@@ -250,41 +250,26 @@ export interface UserStore {
   setStats: (stats: UserStats) => void;
 }
 
-/*
+export interface BET {
+  id: string;
+  amount: number;
+  potentialPayout: number;
+  status: 'WON' | 'LOST' | 'PENDING';
+  oddsAtBet: number;
+  createdAt: Date;
+  outcome: {
+    id: string;
+    label: string;
+    market: MARKET;
+  };
+}
 
-{
-  "user": {
-    "id": "cmc0cdd350000tpqwpul4us7k",
-    "privyId": "did:privy:cmbdp6ry100r3l40msy6ptnby",
-    "clerkId": null,
-    "faucetPoints": 100,
-    "points": 0,
-    "profilePicture": "https://pbs.twimg.com/profile_images/1926921314402447361/-dgoMdlT_normal.png",
-    "firstName": null,
-    "lastName": null,
-    "fullName": "GOAT 🐐",
-    "authMethod": "TWITTER",
-    "email": "",
-    "phone": null,
-    "username": null,
-    "lastClaimedAt": null,
-    "createdAt": "2025-06-17T09:49:37.024Z",
-    "updatedAt": "2025-06-17T09:49:37.024Z",
-    "earlyAccess": false,
-    "degenMode": false,
-    "referralCode": "tEMy3y",
-    "referredById": null,
-    "wallets": [
-      {
-        "walletSource": "PRIVY",
-        "name": "PRIVY",
-        "publicKey": "0x9CCB751a2BC4061B9d6cA49c71412Ae0e414bc8f",
-        "active": true
-      }
-    ]
-  },
-  "stats": {
-    "betsCount": 0,
-    "unreadNotifications": 0
-  }
-}*/
+export interface UserBets {
+  liveBets: BET[];
+  openBets: BET[];
+  settledBets: BET[];
+  profitToday: {
+    amount: string;
+    isPositive: boolean;
+  };
+}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
+import { AddToCalendarButton } from 'add-to-calendar-button-react';
 import {
   ArrowLeft,
   Calendar,
@@ -18,6 +19,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { SERVER_URL } from '@/lib/constants';
+import { formatNumberCompact } from '@/lib/format-number-compact';
+import { MARKET, MARKETS } from '@/types/types';
 
 interface UpcomingEvent {
   id: number;
@@ -34,6 +38,7 @@ interface UpcomingEvent {
   featured?: boolean;
   imageUrl?: string;
 }
+const now = new Date();
 
 // Mock data for upcoming events
 const mockEvents: UpcomingEvent[] = [
@@ -145,11 +150,30 @@ const mockEvents: UpcomingEvent[] = [
   },
 ];
 
-export default function UpcomingEvents() {
-  const { data: events = mockEvents, isLoading } = useQuery({
+type MarketsProps = {
+  initialMarkets: MARKETS;
+};
+
+export default function UpcomingEvents({ initialMarkets }: MarketsProps) {
+  /*const { data: events = mockEvents, isLoading } = useQuery({
     queryKey: ['/api/events/upcoming'],
     queryFn: () => Promise.resolve(mockEvents),
+  });*/
+
+  const { data: response, isLoading } = useQuery({
+    queryKey: [`markets`],
+    queryFn: async () => {
+      const res = await fetch(`${SERVER_URL}markets/basic?limit=10`);
+      return res.json();
+    },
+    initialData: initialMarkets,
+    refetchInterval: 30_000, // every 30 seconds
+    refetchOnWindowFocus: false, // don't refetch when switching tabs (unless needed)
+    staleTime: 29_000, // prevents too-frequent re-fetching
+    refetchIntervalInBackground: false,
   });
+
+  const events: MARKET[] = response?.markets ?? [];
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -160,8 +184,22 @@ export default function UpcomingEvents() {
     });
   };
 
-  const getTimeUntilEvent = (dateString: string, timeString: string) => {
+  const getTimeUntilEvent1 = (dateString: string, timeString: string) => {
     const eventDate = new Date(`${dateString}T${timeString}`);
+    const now = new Date();
+    const diff = eventDate.getTime() - now.getTime();
+
+    if (diff < 0) return 'Started';
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+    if (days > 0) return `${days}d ${hours}h`;
+    return `${hours}h`;
+  };
+
+  const getTimeUntilEvent = (isoDateTime: Date) => {
+    const eventDate = new Date(isoDateTime);
     const now = new Date();
     const diff = eventDate.getTime() - now.getTime();
 
@@ -176,13 +214,13 @@ export default function UpcomingEvents() {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'Championship':
+      case 'ESPORT':
         return 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white';
-      case 'League':
+      case 'FOOTBALL':
         return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'Tournament':
+      case 'BASEBALL':
         return 'bg-purple-100 text-purple-800 border-purple-200';
-      case 'Exhibition':
+      case 'SOCCER':
         return 'bg-green-100 text-green-800 border-green-200';
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
@@ -200,25 +238,25 @@ export default function UpcomingEvents() {
   const eventsByCategory = events
     ? events.reduce(
         (acc, event) => {
-          const category = event.sport;
+          const category = event.category;
           if (!acc[category]) {
             acc[category] = [];
           }
           acc[category].push(event);
           return acc;
         },
-        {} as Record<string, UpcomingEvent[]>,
+        {} as Record<string, MARKET[]>,
       )
     : {};
 
   // Sort categories by total popularity
   const categories = Object.keys(eventsByCategory).sort((a, b) => {
     const aPopularity = eventsByCategory[a].reduce(
-      (sum, event) => sum + event.popularity,
+      (sum, event) => sum + 86, //event.popularity,
       0,
     );
     const bPopularity = eventsByCategory[b].reduce(
-      (sum, event) => sum + event.popularity,
+      (sum, event) => sum + 77, //event.popularity,
       0,
     );
     return bPopularity - aPopularity;
@@ -318,7 +356,7 @@ export default function UpcomingEvents() {
       <div className="space-y-6 p-4">
         {categories.map((category) => {
           const categoryEvents = eventsByCategory[category].sort(
-            (a, b) => b.popularity - a.popularity,
+            (a, b) => 20 - 10,
           );
 
           return (
@@ -336,10 +374,10 @@ export default function UpcomingEvents() {
                   <Card
                     key={event.id}
                     className={`touch-feedback cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-lg ${
-                      event.featured ? 'ring-primary/20 shadow-lg ring-2' : ''
+                      event.isFeatured ? 'ring-primary/20 shadow-lg ring-2' : ''
                     }`}
                   >
-                    {event.featured && (
+                    {event.isFeatured && (
                       <div className="from-primary/10 to-primary/5 absolute inset-0 animate-pulse rounded-lg bg-gradient-to-r" />
                     )}
 
@@ -354,7 +392,7 @@ export default function UpcomingEvents() {
                               <Trophy size={10} className="mr-1" />
                               {event.category}
                             </Badge>
-                            {event.featured && (
+                            {event.isFeatured && (
                               <Badge className="border-orange-200 bg-orange-100 text-xs text-orange-800">
                                 <Star size={10} className="mr-1" />
                                 Featured
@@ -363,19 +401,19 @@ export default function UpcomingEvents() {
                             <div className="flex items-center text-xs">
                               <TrendingUp
                                 size={10}
-                                className={`mr-1 ${getPopularityColor(event.popularity)}`}
+                                className={`mr-1 ${getPopularityColor(30)}`}
                               />
                               <span
-                                className={`font-medium ${getPopularityColor(event.popularity)}`}
+                                className={`font-medium ${getPopularityColor(60)}`}
                               >
-                                {event.popularity}% Popular
+                                {60}% Popular
                               </span>
                             </div>
                           </div>
-                          <h3 className="mb-1 text-base font-bold text-gray-900 dark:text-white">
+                          <h3 className="mb-1 text-base font-bold capitalize text-gray-900 dark:text-white">
                             {event.title}
                           </h3>
-                          <p className="text-xs text-gray-600 dark:text-gray-400">
+                          <p className="text-xs capitalize text-gray-600 dark:text-gray-400">
                             {event.description}
                           </p>
                         </div>
@@ -389,11 +427,10 @@ export default function UpcomingEvents() {
                           </div>
                           <div className="flex items-center text-sm font-bold text-gray-900 dark:text-white">
                             <Calendar className="mr-1 text-primary" size={12} />
-                            {formatDate(event.date)}
+                            {formatDate(event.startsAt.toString())}
                           </div>
                           <div className="mt-1 text-xs text-gray-600 dark:text-gray-400">
-                            {event.time} •{' '}
-                            {getTimeUntilEvent(event.date, event.time)}
+                            {'event time'} • {getTimeUntilEvent(event.startsAt)}
                           </div>
                         </div>
                         <div className="rounded-lg bg-white/70 p-2 dark:bg-gray-800/50">
@@ -402,7 +439,9 @@ export default function UpcomingEvents() {
                           </div>
                           <div className="flex items-center text-sm font-bold text-gray-900 dark:text-white">
                             <MapPin className="mr-1 text-red-600" size={12} />
-                            <span className="truncate">{event.venue}</span>
+                            <span className="truncate">
+                              {event.Match.title}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -413,14 +452,15 @@ export default function UpcomingEvents() {
                           Participants
                         </div>
                         <div className="flex flex-wrap gap-1">
-                          {event.participants.map((participant, index) => (
+                          {/*event.participants.map((participant, index) => (
                             <span
                               key={index}
                               className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300"
                             >
                               {participant}
                             </span>
-                          ))}
+                          ))*/}
+                          100
                         </div>
                       </div>
 
@@ -429,25 +469,34 @@ export default function UpcomingEvents() {
                         <div className="flex items-center space-x-3">
                           <div className="flex items-center text-gray-600 dark:text-gray-400">
                             <Clock size={12} className="mr-1" />
-                            {getTimeUntilEvent(event.date, event.time)}
+                            {getTimeUntilEvent(event.startsAt)}
                           </div>
                           <div className="flex items-center text-gray-600 dark:text-gray-400">
                             <Users size={12} className="mr-1" />
-                            {event.participants.length} participants
+                            {`100`} participants
                           </div>
                         </div>
                         <Badge
                           className={`text-xs ${
-                            event.status === 'upcoming'
+                            event.startsAt &&
+                            event.endsAt &&
+                            //now >= new Date(event.startsAt) &&
+                            now <= new Date(event.startsAt)
                               ? 'border-blue-200 bg-blue-100 text-blue-800'
-                              : event.status === 'live'
+                              : event.startsAt &&
+                                  event.endsAt &&
+                                  now >= new Date(event.startsAt) &&
+                                  now <= new Date(event.endsAt)
                                 ? 'border-red-200 bg-red-100 text-red-800'
                                 : 'border-gray-200 bg-gray-100 text-gray-800'
                           }`}
                         >
-                          {event.status === 'upcoming'
+                          {now <= new Date(event.startsAt)
                             ? 'Upcoming'
-                            : event.status === 'live'
+                            : event.startsAt &&
+                                event.endsAt &&
+                                now >= new Date(event.startsAt) &&
+                                now <= new Date(event.endsAt)
                               ? 'Live'
                               : 'Completed'}
                         </Badge>
@@ -459,12 +508,12 @@ export default function UpcomingEvents() {
                           <div
                             className="to-primary/80 h-1.5 rounded-full bg-gradient-to-r from-primary transition-all"
                             style={{
-                              width: `${event.popularity}%`,
+                              width: `60%`,
                             }}
                           />
                         </div>
                         <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                          {event.popularity}% of users are interested
+                          {60}% of users are interested
                         </div>
                       </div>
 
@@ -478,16 +527,18 @@ export default function UpcomingEvents() {
                           <Calendar size={12} className="mr-1" />
                           Add to Calendar
                         </Button>
+
                         <BettingDrawer
                           market={{
                             ...sampleBetMarket,
                             id: `market-${event.id}`,
                             title: `${event.title} Outcome`,
                             description: `Predict the outcome of ${event.title}`,
+                            tvl: formatNumberCompact(event.totalPools),
                             player: {
-                              name: event.participants[0] || 'Event',
-                              imageUrl: '/api/placeholder/64/64',
-                              sport: event.sport,
+                              name: event.players[0].player.name || 'Event',
+                              imageUrl: event.players[0].player.profilePicture,
+                              sport: event.category,
                             },
                           }}
                           trigger={

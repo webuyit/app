@@ -27,3 +27,19 @@ export function formatToRelativeShort(dateStr: Date) {
 
   return parts.join(' ');
 }
+
+export function formatToESTTime(dateString: Date) {
+  const date = new Date(dateString);
+
+  // Convert to EST (Eastern Standard Time)
+  const options: Intl.DateTimeFormatOptions = {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+    timeZone: 'America/New_York',
+  };
+
+  const formattedTime = new Intl.DateTimeFormat('en-US', options).format(date);
+
+  return `${formattedTime} EST`;
+}

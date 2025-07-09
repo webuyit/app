@@ -2,23 +2,32 @@
 
 import { usePathname } from 'next/navigation';
 
-import { Home, Search, Ticket, User } from 'lucide-react';
+import { Home, Search, Ticket, User as UserIcon } from 'lucide-react';
 import { Link, useTransitionRouter } from 'next-view-transitions';
 import { FaHouseUser } from 'react-icons/fa';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useUserStore } from '@/lib/stores/useUserStore';
+import { UserProfile } from '@/types/types';
+import { User, UserStats } from '@/types/user';
 
 export function BottomNavigation() {
   const pathname = usePathname();
-  const { user, stats } = useUserStore();
+  //const { user, stats } = useUserStore();
+  const user = useUserStore<User>((s) => s.user);
+  const stats = useUserStore<UserStats>((s) => s.stats);
 
   const navItems = [
     { path: '/', icon: Home, label: 'Home' },
     { path: '/explore', icon: Search, label: 'Explore' },
-    { path: '/contracts', icon: Ticket, label: 'My Bets', badge: 3 },
-    { path: `/profile/${user?.id}`, icon: User, label: 'Profile' },
+    {
+      path: `/contracts/${user?.id}`,
+      icon: Ticket,
+      label: 'My Bets',
+      badge: stats.betsCount,
+    },
+    { path: `/profile/${user?.id}`, icon: UserIcon, label: 'Profile' },
   ];
 
   console.log('User from bottom nav', user?.id);

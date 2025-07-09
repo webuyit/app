@@ -15,25 +15,10 @@ import QRCode from 'qrcode';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { BET } from '@/types/types';
 
 interface BetShareCardProps {
-  bet: {
-    id: number;
-    player: {
-      name: string;
-      team: string;
-      imageUrl: string;
-    };
-    betType: string;
-    description: string;
-    odds: string;
-    stake: string;
-    payout: string;
-    result: string;
-    finalStats: string;
-    profit: string;
-    date: string;
-  };
+  bet: BET;
   userName?: string;
 }
 
@@ -46,7 +31,7 @@ export function BetShareCard({
   const cardRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-  const isWin = bet.result === 'WON';
+  const isWin = bet.status === 'WON';
   const platformUrl = 'https://athletebet.app'; // Your platform URL
 
   // Generate QR code
@@ -84,7 +69,7 @@ export function BetShareCard({
           });
 
           const link = document.createElement('a');
-          link.download = `athletebet-${bet.result.toLowerCase()}-${bet.player.name.replace(' ', '-')}.png`;
+          link.download = `athletebet-${bet.status.toLowerCase()}-${bet.outcome?.market.players[0].player.name.replace(' ', '-')}.png`;
           link.href = dataUrl;
           link.click();
 
@@ -109,9 +94,8 @@ export function BetShareCard({
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date();
-    return date.toLocaleDateString('en-US', {
+  const formatDate = (dateString: Date) => {
+    return dateString.toLocaleDateString('en-US', {
       weekday: 'short',
       month: 'short',
       day: 'numeric',
@@ -120,8 +104,8 @@ export function BetShareCard({
     });
   };
 
-  const formatCurrency = (amount: string) => {
-    const num = parseFloat(amount);
+  const formatCurrency = (amount: number) => {
+    const num = parseFloat(amount.toString());
     return num.toFixed(2);
   };
 
@@ -178,7 +162,7 @@ export function BetShareCard({
                 isWin ? 'bg-white text-green-600' : 'bg-white text-red-600'
               }`}
             >
-              {bet.result}
+              {bet.status}
             </div>
           </div>
 
@@ -201,12 +185,12 @@ export function BetShareCard({
             <div className="flex items-center space-x-3">
               <Avatar className="h-12 w-12">
                 <AvatarImage
-                  src={bet.player.imageUrl}
-                  alt={bet.player.name}
+                  src={bet.outcome.market.players[0].player.profilePicture}
+                  alt={bet.outcome.market.players[0].player.name}
                   className="object-cover"
                 />
                 <AvatarFallback className="text-sm font-medium">
-                  {bet.player.name
+                  {bet.outcome.market.players[0].player.name
                     .split(' ')
                     .map((n) => n[0])
                     .join('')
@@ -215,7 +199,9 @@ export function BetShareCard({
               </Avatar>
               <div>
                 <div className="font-bold text-gray-900">@{userName}</div>
-                <div className="text-sm text-gray-600">{bet.player.name}</div>
+                <div className="text-sm text-gray-600">
+                  {bet.outcome.market.players[0].player.name}
+                </div>
               </div>
             </div>
             <div className="text-gray-400">
@@ -243,7 +229,7 @@ export function BetShareCard({
               }`}
             >
               {isWin ? '+' : '-'}
-              {formatCurrency(isWin ? bet.payout : bet.stake)}
+              {formatCurrency(isWin ? bet.potentialPayout : bet.amount)}
               <div className="ml-2 flex h-8 w-8 items-center justify-center rounded-full bg-yellow-400">
                 <span className="text-sm text-yellow-800">💰</span>
               </div>
@@ -257,14 +243,12 @@ export function BetShareCard({
             <div
               className={`text-sm font-medium ${isWin ? 'text-green-800' : 'text-red-800'}`}
             >
-              {bet.player.name}&apos;s {bet.betType}
+              {bet.outcome.market.title}
             </div>
             <div className="mt-1 text-sm text-gray-600">
-              Bet: {bet.description}
+              Bet: {bet.outcome.market.description}
             </div>
-            <div className="mt-1 text-xs text-gray-500">
-              Result: {bet.finalStats}
-            </div>
+            <div className="mt-1 text-xs text-gray-500">Result: 30 Points</div>
           </div>
 
           {/* Bottom Row with QR and Details */}
@@ -279,13 +263,13 @@ export function BetShareCard({
                 <div>
                   <div className="mb-1 text-xs text-gray-500">Odds</div>
                   <div className="text-sm font-bold text-gray-900">
-                    {getOddsDisplay(bet.odds)}
+                    {bet.oddsAtBet}
                   </div>
                 </div>
                 <div>
                   <div className="mb-1 text-xs text-gray-500">Stake</div>
                   <div className="text-sm font-bold text-gray-900">
-                    {formatCurrency(bet.stake)}
+                    {formatCurrency(bet.amount)}
                   </div>
                 </div>
                 <div>
@@ -297,7 +281,7 @@ export function BetShareCard({
               </div>
               <div className="mt-2 text-center">
                 <div className="text-xs text-gray-500">
-                  On {formatDate(bet.date)}
+                  On {formatDate(bet.createdAt)}
                 </div>
               </div>
             </div>

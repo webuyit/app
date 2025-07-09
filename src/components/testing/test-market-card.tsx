@@ -9,7 +9,9 @@ import {
   OutcomeWithSimulation,
   simulateOddsWithUserStake,
 } from '@/lib/odds-calculator';
+import { useUserStore } from '@/lib/stores/useUserStore';
 import { MARKET } from '@/types/types';
+import { User } from '@/types/user';
 
 import { Button } from '../ui/button';
 
@@ -27,6 +29,7 @@ export const MarketCard = ({ market }: Props) => {
   const [selectedOutcomeId, setSelectedOutcomeId] = useState<string | null>(
     null,
   );
+  const user = useUserStore<User>((s) => s.user);
 
   const handleStakeChange = (outcomeId: string, value: number) => {
     setSelectedOutcomeId(outcomeId);
@@ -79,7 +82,7 @@ export const MarketCard = ({ market }: Props) => {
                       mutation.mutate({
                         amount: stakes[outcome.id],
                         outcomeId: outcome.id,
-                        userId: DEMO_USER,
+                        userId: user.id,
                       })
                     }
                   >

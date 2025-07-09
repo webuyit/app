@@ -13,8 +13,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { getHighestOdds } from '@/lib/getHighestOdds';
 import { MARKET, PLAYER } from '@/types/types';
 
+import { BettingDrawer, sampleBetMarket } from '../betting-drawer';
 import InitUserClient from '../initUserClient';
 
 const sportCategories = [
@@ -78,14 +80,12 @@ export default function Explore({ players, markets }: Props) {
     return matchesSearch && matchesCategory;
   });
 
-  console.log('Filtered markets', filteredBets);
-
   const formatTotalLocked = (amount: string) => {
     const num = parseFloat(amount);
     if (num >= 1000) {
-      return `$${(num / 1000).toFixed(1)}K`;
+      return `${(num / 1000).toFixed(1)}K`;
     }
-    return `$${num.toFixed(0)}`;
+    return `${num.toFixed(0)}`;
   };
 
   return (
@@ -259,8 +259,27 @@ export default function Explore({ players, markets }: Props) {
                         <div className="mb-1 text-xs text-gray-500">
                           Total Locked
                         </div>
-                        <div className="text-sm font-semibold text-gray-900">
+                        <div className="hidden text-sm font-semibold text-gray-900">
                           {formatTotalLocked('2000')}
+                        </div>
+                        <div className="flex items-center space-x-0">
+                          <Avatar className="h-4 w-4">
+                            <AvatarImage
+                              src={`/img/coin.png`}
+                              alt={'coin'}
+                              className="object-cover"
+                            />
+                            <AvatarFallback className="text-xs">
+                              {bet.players[0]?.player?.name
+                                ?.split(' ')
+                                .map((n: string) => n[0])
+                                .join('')
+                                .substring(0, 2)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="text-sm font-semibold text-gray-900">
+                            {formatTotalLocked(bet.totalPools.toString())}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -276,15 +295,41 @@ export default function Explore({ players, markets }: Props) {
                       <div className="flex items-center space-x-1">
                         <span className="text-xs text-gray-500">Odds:</span>
                         <span className="text-sm font-semibold text-primary">
-                          {'1.7'}
+                          {getHighestOdds(bet.outcomes)}
                         </span>
                       </div>
                       <Button
                         size="sm"
-                        className="hover:bg-primary/90 bg-primary text-white"
+                        className="hover:bg-primary/90 hidden bg-primary text-white"
                       >
                         Place Bet
                       </Button>
+                      <BettingDrawer
+                        market={{
+                          ...sampleBetMarket,
+                          id: `market-${bet.id}`,
+                          title: bet.title,
+                          description: bet.description,
+                          player: {
+                            name:
+                              bet.players[0].player?.name || 'Unknown Player',
+                            imageUrl:
+                              bet.players[0]?.player?.profilePicture ||
+                              '/api/placeholder/64/64',
+                            sport: bet.players[0]?.player?.category || 'Sports',
+                          },
+                          tvl: formatTotalLocked(bet.totalPools.toString()),
+                          outcomes: bet.outcomes,
+                        }}
+                        trigger={
+                          <Button
+                            size="sm"
+                            className="hover:bg-primary/90 bg-primary text-white"
+                          >
+                            Place Bet
+                          </Button>
+                        }
+                      />
                     </div>
                   </CardContent>
                 </Card>

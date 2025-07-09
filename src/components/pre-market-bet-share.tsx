@@ -17,27 +17,10 @@ import QRCode from 'qrcode';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { BET } from '@/types/types';
 
 interface BetShareCardProps {
-  bet: {
-    id: number;
-    player: {
-      name: string;
-      team: string;
-      imageUrl: string;
-    };
-    betType: string;
-    description: string;
-    odds: string;
-    stake: string;
-    potentialWin: string;
-    //result: string;
-    //finalStats: string;
-    ///profit: string;
-    date: string;
-    gameTime: string;
-    oppenent: string;
-  };
+  bet: BET;
   userName?: string;
 }
 
@@ -88,7 +71,7 @@ export function PreMarketBetShareCard({
           });
 
           const link = document.createElement('a');
-          link.download = `athletebet-${bet.player.name.replace(' ', '-')}.png`;
+          link.download = `athletebet-${bet.outcome.market.players[0].player.name.replace(' ', '-')}.png`;
           link.href = dataUrl;
           link.click();
 
@@ -114,7 +97,7 @@ export function PreMarketBetShareCard({
   };
 
   const formatDate = (dateString: string) => {
-    const date = new Date();
+    const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
       weekday: 'short',
       month: 'short',
@@ -124,8 +107,8 @@ export function PreMarketBetShareCard({
     });
   };
 
-  const formatCurrency = (amount: string) => {
-    const num = parseFloat(amount);
+  const formatCurrency = (amount: number) => {
+    const num = parseFloat(amount.toString());
     return num.toFixed(2);
   };
 
@@ -211,12 +194,12 @@ export function PreMarketBetShareCard({
             <div className="flex items-center space-x-1">
               <Avatar className="hidden h-12 w-12">
                 <AvatarImage
-                  src={bet.player.imageUrl}
-                  alt={bet.player.name}
+                  src={bet.outcome.market.players[0].player.profilePicture}
+                  alt={bet.outcome.market.players[0].player.name}
                   className="object-cover"
                 />
                 <AvatarFallback className="text-sm font-medium">
-                  {bet.player.name
+                  {bet.outcome.market.players[0].player.name
                     .split(' ')
                     .map((n) => n[0])
                     .join('')
@@ -235,10 +218,10 @@ export function PreMarketBetShareCard({
               </div>
               <div>
                 <div className="text-lg font-semibold text-gray-900">
-                  {'Ilia Topuria'}
+                  {bet.outcome.market.players[0].player.name}
                 </div>
                 <div className="hidden text-sm text-gray-600">
-                  {bet.player.name}
+                  {bet.outcome.market.players[0].player.name}
                 </div>
               </div>
             </div>
@@ -260,7 +243,7 @@ export function PreMarketBetShareCard({
               }`}
             >
               {isWin ? '+' : '-'}
-              {formatCurrency(isWin ? bet.potentialWin : bet.stake)}
+              {formatCurrency(isWin ? bet.potentialPayout : bet.amount)}
               <Image
                 src={`/img/coin.png`}
                 width={40}
@@ -296,13 +279,13 @@ export function PreMarketBetShareCard({
                 <div>
                   <div className="mb-1 text-xs text-gray-500">Odds</div>
                   <div className="text-sm font-bold text-gray-900">
-                    {getOddsDisplay(bet.odds)}
+                    {bet.oddsAtBet}
                   </div>
                 </div>
                 <div>
                   <div className="mb-1 text-xs text-gray-500">Stake</div>
                   <div className="text-sm font-bold text-gray-900">
-                    {formatCurrency(bet.stake)}
+                    {formatCurrency(bet.amount)}
                   </div>
                 </div>
                 <div>
@@ -312,7 +295,7 @@ export function PreMarketBetShareCard({
               </div>
               <div className="mt-2 text-center">
                 <div className="text-xs text-muted-foreground">
-                  On {formatDate(bet.date)}
+                  On {formatDate(bet.createdAt)}
                 </div>
               </div>
             </div>

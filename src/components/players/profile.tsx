@@ -415,7 +415,7 @@ export default function PlayerProfile({ player }: Props) {
                     </div>
                     <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                       <Users size={14} className="mr-2" />
-                      {mockPlayer.team}
+                      {player.team.name}
                     </div>
                     <Badge className="bg-primary/10 text-xs text-primary">
                       {player.category}
