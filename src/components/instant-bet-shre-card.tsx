@@ -19,21 +19,36 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { getSportEmoji } from '@/lib/getSportEmoji';
 import { shareCard } from '@/lib/shareCard';
-import { BET } from '@/types/types';
+import { useUserStore } from '@/lib/stores/useUserStore';
+import { truncateMiddle } from '@/lib/utils';
+import { BET, MARKET } from '@/types/types';
+import { User } from '@/types/user';
+
+import { BetMarket } from './betting-drawer';
 
 interface BetShareCardProps {
-  bet: BET;
+  bet: BetMarket;
   userName?: string;
+  potentialPayout: number;
+  oddsAtBet: number;
+  stake?: number;
+  amount: number;
+  outcomeLabel: string;
 }
 
-export function PreMarketBetShareCard({
+export function InstantBetShareCard({
   bet,
-  userName = 'AthleteBetter',
+  potentialPayout,
+  oddsAtBet,
+  stake,
+  amount,
+  outcomeLabel,
 }: BetShareCardProps) {
   const [qrCodeUrl, setQrCodeUrl] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const user = useUserStore<User>((s) => s.user);
 
   const isWin = true;
   const platformUrl = 'https://mygoat.fun'; // Your platform URL
@@ -81,7 +96,7 @@ export function PreMarketBetShareCard({
           });
 
           const link = document.createElement('a');
-          link.download = `athletebet-${bet.outcome.market.players[0].player.name.replace(' ', '-')}.png`;
+          link.download = `athletebet-${bet.player.name.replace(' ', '-')}.png`;
           link.href = dataUrl;
           link.click();
 
@@ -195,12 +210,12 @@ export function PreMarketBetShareCard({
             <div className="flex items-center space-x-1">
               <Avatar className="h-14 w-14">
                 <AvatarImage
-                  src={bet.outcome.market.players[0].player.profilePicture}
-                  alt={bet.outcome.market.players[0].player.name}
+                  src={bet.player.imageUrl}
+                  alt={bet.player.name}
                   className="object-cover"
                 />
                 <AvatarFallback className="text-sm font-medium">
-                  {bet.outcome.market.players[0].player.name
+                  {bet.player.name
                     .split(' ')
                     .map((n) => n[0])
                     .join('')
@@ -210,14 +225,12 @@ export function PreMarketBetShareCard({
 
               <div>
                 <div className="text-lg font-semibold capitalize text-gray-900">
-                  {bet.outcome.market.players[0].player.name}
+                  {bet.player.name}
                 </div>
               </div>
             </div>
             <div className="text-gray-400">
-              <p className="text-2xl">
-                {getSportEmoji(bet.outcome.market.Match.category)}
-              </p>
+              <p className="text-2xl">{getSportEmoji(bet.player.sport)}</p>
             </div>
           </div>
 
@@ -234,7 +247,7 @@ export function PreMarketBetShareCard({
               }`}
             >
               {isWin ? '+' : '-'}
-              {formatCurrency(isWin ? bet.potentialPayout : bet.amount)}
+              {formatCurrency(isWin ? potentialPayout : amount)}
               <Image
                 src={`/img/coin.png`}
                 width={40}
@@ -250,13 +263,13 @@ export function PreMarketBetShareCard({
             className={`mb-4 rounded-lg p-3 ${isWin ? 'bg-green-50' : 'bg-red-50'}`}
           >
             <div
-              className={`text-sm font-medium ${isWin ? 'text-green-800' : 'text-red-800'}`}
+              className={`text-sm font-medium capitalize ${isWin ? 'text-green-800' : 'text-red-800'}`}
             >
               {/*bet.player.name}&apos;s {bet.betType*/}
-              {bet.outcome.market.title}
+              {bet.title}
             </div>
             <div className="mt-1 text-sm text-gray-600">
-              Outcome: {bet.outcome.label}
+              Outcome: {outcomeLabel}
             </div>
           </div>
 
@@ -272,23 +285,27 @@ export function PreMarketBetShareCard({
                 <div>
                   <div className="mb-1 text-xs text-gray-500">Odds</div>
                   <div className="text-sm font-bold text-gray-900">
-                    {bet.oddsAtBet}
+                    {oddsAtBet}
                   </div>
                 </div>
                 <div>
                   <div className="mb-1 text-xs text-gray-500">Stake</div>
                   <div className="text-sm font-bold text-gray-900">
-                    {formatCurrency(bet.amount)}
+                    {formatCurrency(amount)}
                   </div>
                 </div>
                 <div>
                   <div className="mb-1 text-xs text-gray-500">Placed by</div>
-                  <div className="text-sm font-bold text-gray-900">Kabugu</div>
+                  <div className="text-sm font-bold text-gray-900">
+                    {user.fullName
+                      ? truncateMiddle(user.fullName, 0, 4, 20)
+                      : 'Kabugu'}
+                  </div>
                 </div>
               </div>
               <div className="mt-2 text-center">
                 <div className="text-xs text-muted-foreground">
-                  On {formatDate(bet.createdAt)}
+                  On {formatDate(new Date())}
                 </div>
               </div>
             </div>
@@ -311,7 +328,7 @@ export function PreMarketBetShareCard({
           ) : (
             <div className="flex items-center space-x-2">
               <Share2 size={16} />
-              <span>Share Result</span>
+              <span>Share Card</span>
             </div>
           )}
         </Button>

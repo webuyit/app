@@ -9,7 +9,6 @@ import { FaHouseUser } from 'react-icons/fa';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useUserStore } from '@/lib/stores/useUserStore';
-import { UserProfile } from '@/types/types';
 import { User, UserStats } from '@/types/user';
 
 export function BottomNavigation() {
@@ -52,8 +51,8 @@ export function BottomNavigation() {
                 <span className={`text-xs ${isActive ? 'font-medium' : ''}`}>
                   {item.label}
                 </span>
-                {item.badge && (
-                  <Badge className="absolute -right-1 -top-1 flex h-5 w-5 min-w-0 items-center justify-center rounded-full bg-primary p-0 text-xs text-white">
+                {typeof item.badge === 'number' && item.badge > 0 && (
+                  <Badge className="absolute -right-0.5 -top-1 flex h-5 w-5 min-w-0 items-center justify-center rounded-full bg-primary p-0 text-xs text-white">
                     {item.badge}
                   </Badge>
                 )}

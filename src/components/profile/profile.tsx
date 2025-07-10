@@ -5,6 +5,11 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 import {
+  useAccountModal,
+  useChainModal,
+  useConnectModal,
+} from '@rainbow-me/rainbowkit';
+import {
   Banknote,
   Coins,
   Copy,
@@ -16,14 +21,17 @@ import {
   Lock,
   Moon,
   Plus,
+  Search,
   Sun,
+  Ticket,
   TrendingDown,
   TrendingUp,
   Upload,
-  User,
+  User as UserIcon,
   Wallet,
   Zap,
 } from 'lucide-react';
+import { useAccount } from 'wagmi';
 
 import { BottomNavigation } from '@/components/bottom-navigation';
 import { Header } from '@/components/header';
@@ -40,12 +48,20 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useToast } from '@/hooks/use-toast';
-import { CHILIZ_LOGO } from '@/lib/constants';
+import { useRegisterWallet } from '@/hooks/useRegisterSociosWallet';
+import { CHILIZ_LOGO, SERVER_URL } from '@/lib/constants';
 import { useUserStore } from '@/lib/stores/useUserStore';
+import { formatRelativeTime, getTransactionTitle } from '@/lib/ui-utils';
+import { hasSociosWallet } from '@/lib/userWallets';
 import { truncateMiddle } from '@/lib/utils';
+import { TRANSACTION } from '@/types/types';
+import { User } from '@/types/user';
 
 import { ChaserSwapDrawer } from '../chaser-swap-drawar';
 import InitUserClient from '../initUserClient';
+import TokenPorfolio from '../profile-2/token-portfolio';
+import WalletQuickActions from '../profile-2/wallet-quick-actions';
+import WalletTabHeader from '../profile-2/wallet-tab-header';
 
 // Mock transaction data
 const mockTransactions = [
@@ -131,30 +147,27 @@ const mockTokens = [
   },
 ];
 
-export default function Profile() {
+type Props = {
+  transactions: TRANSACTION[];
+};
+
+export default function Profile({ transactions }: Props) {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showBalance, setShowBalance] = useState(true);
-  const [walletAddress] = useState('0x742d35Cc8bF9f9B8264...3f1a7E');
+  const { openConnectModal } = useConnectModal();
+  const { address, isConnected } = useAccount();
   const { toast } = useToast();
-  const { user } = useUserStore();
+  const user = useUserStore<User>((s) => s.user);
   console.log('user from profile', user);
-  useEffect(() => {
-    // Check for saved theme preference
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      setIsDarkMode(true);
-      document.documentElement.classList.add('dark');
-    }
-  }, []);
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
     if (!isDarkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
+      //document.documentElement.classList.add('dark');
+      //localStorage.setItem('theme', 'dark');
     } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
+      // document.documentElement.classList.remove('dark');
+      //localStorage.setItem('theme', 'light');
     }
 
     toast({
@@ -163,32 +176,18 @@ export default function Profile() {
     });
   };
 
-  const copyAddress = async () => {
-    try {
-      await navigator.clipboard.writeText(user?.wallets[0].publicKey as string);
-      toast({
-        title: 'Address copied!',
-        description: 'Wallet address copied to clipboard',
-      });
-    } catch (error) {
-      toast({
-        title: 'Failed to copy',
-        description: 'Unable to copy address to clipboard',
-        variant: 'destructive',
-      });
-    }
-  };
-
   const getTransactionIcon = (type: string) => {
     switch (type) {
-      case 'deposit':
+      case 'DEPOSIT':
         return <Download className="text-green-600" size={16} />;
-      case 'withdrawal':
+      case 'WITHDRAW':
         return <Upload className="text-red-600" size={16} />;
-      case 'bet_win':
+      case 'BET_WON':
         return <TrendingUp className="text-green-600" size={16} />;
-      case 'bet_loss':
+      case 'BET_LOST':
         return <TrendingDown className="text-red-600" size={16} />;
+      case 'BET_PLACED':
+        return <Ticket className="text-green-600" size={16} />;
       default:
         return <DollarSign className="text-gray-600" size={16} />;
     }
@@ -197,6 +196,14 @@ export default function Profile() {
   const formatCurrency = (amount: string) => {
     return `$${amount}`;
   };
+
+  const isSociosConnected = hasSociosWallet(user?.wallets);
+
+  // REGISTER SOCIOS WALLET
+  useRegisterWallet({
+    userId: user?.id, // from store or auth
+    walletSource: 'SOCIOS',
+  });
 
   return (
     <div className="min-h-screen bg-gray-50 transition-colors duration-300 dark:border-gray-700 dark:bg-gray-900 md:mx-auto md:max-w-md md:border-x md:border-gray-200">
@@ -229,7 +236,7 @@ export default function Profile() {
               value="profile"
               className="flex items-center space-x-2"
             >
-              <User size={16} />
+              <UserIcon size={16} />
               <span>Profile</span>
             </TabsTrigger>
             <TabsTrigger value="wallet" className="flex items-center space-x-2">
@@ -266,11 +273,11 @@ export default function Profile() {
 
                   <div className="">
                     <div className="mb-1 text-3xl font-bold">
-                      {showBalance ? '2,450.00' : '••••••'}
+                      {showBalance ? '0.00' : '••••••'}
                     </div>
 
                     <div className="flex items-center text-sm opacity-80">
-                      ≈ $125.00
+                      ≈ $0.00
                     </div>
                   </div>
                 </div>
@@ -402,42 +409,55 @@ export default function Profile() {
               </CardHeader>
               <CardContent className="p-0">
                 <div className="space-y-0">
-                  {mockTransactions.map((transaction, index) => (
-                    <div key={transaction.id}>
-                      <div className="flex items-center justify-between p-4 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
-                        <div className="flex items-center space-x-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-                            {getTransactionIcon(transaction.type)}
-                          </div>
-                          <div>
-                            <h4 className="text-sm font-medium">
-                              {transaction.description}
-                            </h4>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">
-                              {transaction.date}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div
-                            className={`text-sm font-medium ${
-                              transaction.amount.startsWith('+')
-                                ? 'text-green-600'
-                                : 'text-red-600'
-                            }`}
-                          >
-                            {transaction.amount}
-                          </div>
-                          <Badge variant="outline" className="text-xs">
-                            {transaction.status}
-                          </Badge>
-                        </div>
+                  {/* Empty State */}
+                  {transactions.length === 0 && (
+                    <div className="py-12 text-center">
+                      <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+                        <Search className="text-gray-400" size={24} />
                       </div>
-                      {index < mockTransactions.length - 1 && (
-                        <Separator className="mx-4" />
-                      )}
+                      <h3 className="mb-2 text-lg font-medium text-gray-900">
+                        No Transactions found
+                      </h3>
                     </div>
-                  ))}
+                  )}
+                  {transactions.length > 0 &&
+                    transactions.map((transaction: TRANSACTION, index) => (
+                      <div key={transaction.id}>
+                        <div className="flex items-center justify-between p-4 transition-colors hover:bg-gray-50">
+                          <div className="flex items-center space-x-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
+                              {getTransactionIcon(transaction.type)}
+                            </div>
+                            <div>
+                              <h4 className="text-sm font-medium">
+                                {getTransactionTitle(transaction.type)}
+                              </h4>
+                              <p className="text-xs text-gray-600 dark:text-gray-400">
+                                {formatRelativeTime(transaction.createdAt)}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div
+                              className={`text-sm font-medium ${
+                                transaction.type === 'DEPOSIT' ||
+                                transaction.type === 'BET_PLACED'
+                                  ? 'text-green-600'
+                                  : 'text-red-600'
+                              }`}
+                            >
+                              {transaction.amount.toFixed(2)}
+                            </div>
+                            <Badge variant="outline" className="text-xs">
+                              Completed
+                            </Badge>
+                          </div>
+                        </div>
+                        {index < mockTransactions.length - 1 && (
+                          <Separator className="mx-4" />
+                        )}
+                      </div>
+                    ))}
                 </div>
               </CardContent>
             </Card>
@@ -445,102 +465,23 @@ export default function Profile() {
 
           {/* Wallet Tab */}
           <TabsContent value="wallet" className="space-y-6">
-            {/* Wallet Address Card */}
-            <Card className="bg-gradient-to-r from-purple-600 to-blue-600 text-white">
-              <CardContent className="p-6">
-                <h3 className="mb-4 text-lg font-semibold opacity-90">
-                  Wallet Address
-                </h3>
-                <div className="flex items-center justify-between rounded-lg bg-black/20 p-3">
-                  <span className="truncate font-mono text-sm">
-                    {user?.wallets[0].publicKey}
-                  </span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={copyAddress}
-                    className="h-8 w-8 p-0 text-white hover:bg-white/10"
-                  >
-                    <Copy size={14} />
-                  </Button>
-                </div>
-                <p className="mt-2 text-xs opacity-70">
-                  This is your unique wallet address for receiving tokens
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Token Portfolio */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Coins size={20} />
-                  <span>Token Portfolio</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                <div className="space-y-0">
-                  {mockTokens.map((token, index) => (
-                    <div key={token.id}>
-                      <div className="flex items-center justify-between p-4 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
-                        <div className="flex items-center space-x-3">
-                          <Avatar className="h-8 w-8">
-                            <AvatarImage src={token.logo} alt="Profile" />
-                            <AvatarFallback className="bg-primary text-xl font-bold text-white">
-                              {token.symbol}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <h4 className="font-medium">
-                              {truncateMiddle(token.name, 10, 7, 18)}
-                            </h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                              {token.symbol}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div className="font-medium">{token.balance}</div>
-                          <div className="flex items-center space-x-2 text-sm">
-                            <span className="text-gray-600 dark:text-gray-400">
-                              {token.price}
-                            </span>
-                            <span
-                              className={`${
-                                token.change.startsWith('+')
-                                  ? 'text-green-600'
-                                  : 'text-red-600'
-                              }`}
-                            >
-                              {token.change}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      {index < mockTokens.length - 1 && (
-                        <Separator className="mx-4" />
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Quick Actions for Wallet */}
-            <div className="grid grid-cols-3 gap-3">
-              <Button variant="outline" className="h-16 flex-col space-y-1">
-                <Banknote size={20} />
-                <span className="text-xs">Buy Crypto</span>
-              </Button>
-              <Button variant="outline" className="h-16 flex-col space-y-1">
-                <Upload size={20} />
-                <span className="text-xs">Send</span>
-              </Button>
-              <Button variant="outline" className="h-16 flex-col space-y-1">
-                <Download size={20} />
-                <span className="text-xs">Receive</span>
-              </Button>
-            </div>
+            {isSociosConnected && address ? (
+              <div className="space-y-6">
+                <WalletTabHeader />
+                <TokenPorfolio />
+                <WalletQuickActions />
+              </div>
+            ) : (
+              <div className="flex w-full items-center justify-center">
+                <Button
+                  size={'lg'}
+                  onClick={openConnectModal}
+                  disabled={isConnected}
+                >
+                  Connect Socios Wallet
+                </Button>
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </div>

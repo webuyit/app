@@ -6,23 +6,24 @@ const nextConfig: NextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
   images: {
     remotePatterns: [
-      new URL('https://pbs.twimg.com/profile_images/**'),
+      {
+        protocol: 'https',
+        hostname: 'pbs.twimg.com',
+        pathname: '/**', // ✅ this is required
+      },
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
-        port: '',
-        //pathname: '/images/**',
+        pathname: '/**', // ✅ this is required
+      },
+      {
+        protocol: 'http',
+        hostname: 'res.cloudinary.com',
+        pathname: '/**', // ✅ this is required
       },
     ],
   },
 };
 
-//export default nextConfig;
-const withMDX = createMDX({
-  // Add markdown plugins here, as desired
-});
-
-// Merge MDX config with Next.js config
+const withMDX = createMDX();
 export default withMDX(nextConfig);
-
-//pbs.twimg.com

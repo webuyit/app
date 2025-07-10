@@ -273,3 +273,29 @@ export interface UserBets {
     isPositive: boolean;
   };
 }
+
+export interface TRANSACTION {
+  id: string;
+  type:
+    | 'DEPOSIT'
+    | 'WITHDRAW'
+    | 'BET_PLACED'
+    | 'BET_WON'
+    | 'BET_LOST'
+    | 'STAKE_REWARD'
+    | 'LEVEL_UP_REWARD'
+    | 'MARKET_CREATED'
+    | 'REFERRAL_REWARD'
+    | 'SPONSOR_REWARD'
+    | 'REWARD_CLAIMED';
+  amount: number;
+  token: string | null;
+  description: string | null;
+  transactionId: string;
+  createdAt: string | Date;
+}
+
+export interface UserTransactions {
+  transactions: TRANSACTION[];
+  pagination: PAGINATION;
+}

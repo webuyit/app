@@ -43,12 +43,20 @@ import {
   simulateOddsWithUserStake,
 } from '@/lib/odds-calculator';
 import { useUserStore } from '@/lib/stores/useUserStore';
-import { OUTCOME } from '@/types/types';
+import { MARKET, OUTCOME } from '@/types/types';
 import { User } from '@/types/user';
 
+import { InstantBetShareCard } from './instant-bet-shre-card';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from './ui/dialog';
 
-interface BetMarket {
+export interface BetMarket {
   id: string;
   title: string;
   description: string;
@@ -61,6 +69,7 @@ interface BetMarket {
   tvl: string;
   volume24h: string;
   endDate: string;
+  createdAt: Date;
   linkedTournaments: Array<{
     id: string;
     name: string;
@@ -84,7 +93,7 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
   const [selectedOutcome, setSelectedOutcome] = useState<string | null>(null);
   const [stakeAmount, setStakeAmount] = useState<string>('');
   const [isOpen, setIsOpen] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(true);
   const user = useUserStore<User>((s) => s.user);
   // initialize client
 
@@ -207,15 +216,31 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
                   <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
                     Bet placed Successful!
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Tweet about it
-                  </p>
                 </div>
-
                 <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
                   <Sparkles size={16} className="text-yellow-500" />
                   <span>Transaction completed in 2.3 seconds</span>
                 </div>
+
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button size="lg">Brag About It 🚀</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>
+                        Share Your Bet Card on social media
+                      </DialogTitle>
+                    </DialogHeader>
+                    <InstantBetShareCard
+                      amount={Number(stakeAmount) || 30}
+                      bet={market}
+                      potentialPayout={selected?.potentialPayout || 300}
+                      oddsAtBet={selected?.odds || 3.4}
+                      outcomeLabel={selected?.label || 'YES'}
+                    />
+                  </DialogContent>
+                </Dialog>
               </motion.div>
             ) : (
               <motion.div
