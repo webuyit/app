@@ -34,7 +34,6 @@ export default function TotalBalanceCard({
     usd: 0.0,
     chz: 0.0,
   });
-  console.log('Total balances', total);
 
   function formatTokenBalance(balance: number | string): string {
     const parsed = parseFloat(balance as string);
@@ -50,9 +49,7 @@ export default function TotalBalanceCard({
     data,
     isLoading: enhancedTokensLoading,
     error,
-  } = useEnhancedTokens(walletAddress! || user.wallets[0].publicKey!);
-
-  console.log('enhanced tokens', data);
+  } = useEnhancedTokens(walletAddress! || user?.wallets[0]?.publicKey);
 
   useEffect(() => {
     if (!data) return;

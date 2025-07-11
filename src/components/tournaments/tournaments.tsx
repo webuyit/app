@@ -23,6 +23,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+
 interface Tournament {
   id: number;
   title: string;
@@ -55,7 +57,7 @@ const mockTournaments: Tournament[] = [
     sport: 'Basketball',
     status: 'upcoming',
     prize: '$50,000',
-    entryFee: '$250',
+    entryFee: '250',
     participants: 1847,
     maxParticipants: 2000,
     difficulty: 'Expert',
@@ -84,7 +86,7 @@ const mockTournaments: Tournament[] = [
     sport: 'Soccer',
     status: 'invite',
     prize: '$25,000',
-    entryFee: '$500',
+    entryFee: '500',
     participants: 45,
     maxParticipants: 100,
     difficulty: 'Expert',
@@ -98,7 +100,7 @@ const mockTournaments: Tournament[] = [
     sport: 'Multi-Sport',
     status: 'upcoming',
     prize: '$75,000',
-    entryFee: '$100',
+    entryFee: '100',
     participants: 156,
     maxParticipants: 500,
     difficulty: 'Pro',
@@ -118,7 +120,7 @@ const mockTournaments: Tournament[] = [
     sport: 'American Football',
     status: 'upcoming',
     prize: '$15,000',
-    entryFee: '$50',
+    entryFee: '50',
     participants: 892,
     maxParticipants: 1500,
     difficulty: 'Intermediate',
@@ -132,7 +134,7 @@ const mockTournaments: Tournament[] = [
     sport: 'Basketball',
     status: 'upcoming',
     prize: '$100,000',
-    entryFee: '$500',
+    entryFee: '500',
     participants: 78,
     maxParticipants: 200,
     difficulty: 'Expert',
@@ -152,7 +154,7 @@ const mockTournaments: Tournament[] = [
     sport: 'Baseball',
     status: 'upcoming',
     prize: '$30,000',
-    entryFee: '$150',
+    entryFee: '150',
     participants: 567,
     maxParticipants: 1000,
     difficulty: 'Pro',
@@ -471,10 +473,16 @@ export default function Tournaments() {
                           Entry Fee
                         </div>
                         <div className="flex items-center text-sm font-bold text-gray-900">
-                          <DollarSign
-                            className="mr-1 text-green-600"
-                            size={12}
-                          />
+                          <Avatar className="mr-1 h-4 w-4">
+                            <AvatarImage
+                              src={`/img/coin.png`}
+                              alt={'coin'}
+                              className="object-cover"
+                            />
+                            <AvatarFallback className="text-xs">
+                              $
+                            </AvatarFallback>
+                          </Avatar>
                           {tournament.entryFee}
                         </div>
                       </div>
@@ -523,10 +531,11 @@ export default function Tournaments() {
                       size="sm"
                       className={`w-full py-2 text-xs ${getTournamentButtonStyle(tournament.type)}`}
                       disabled={
-                        (tournament.status === 'invite' &&
+                        /* (tournament.status === 'invite' &&
                           tournament.type === 'PRIVATE') ||
                         (tournament.type === 'GATED' &&
-                          !hasTokenRequirement(tournament))
+                          !hasTokenRequirement(tournament))*/
+                        true
                       }
                     >
                       {tournament.type === 'PREMIUM' && (

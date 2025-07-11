@@ -267,8 +267,8 @@ export default function Profile({ transactions }: Props) {
                       <Coins size={20} className="hidden text-primary" />
                       <Image
                         src={`/img/coin.png`}
-                        width={20}
-                        height={20}
+                        width={25}
+                        height={25}
                         alt="currency"
                         className=""
                       />
@@ -278,14 +278,25 @@ export default function Profile({ transactions }: Props) {
                         Chaser Balance
                       </p>
                       <p className="text-xl font-bold text-gray-900 dark:text-white">
-                        {showBalance ? '24,500' : '••••••'}
+                        {showBalance
+                          ? user
+                            ? user.faucetPoints.toFixed(2)
+                            : 0.0
+                          : '••••••'}
                       </p>
                       <p className="text-xs text-gray-500">
-                        ≈ {showBalance ? '245.00' : '••••••'} USD
+                        ≈{' '}
+                        {showBalance
+                          ? user
+                            ? user.faucetPoints.toFixed(2)
+                            : 0.0
+                          : '••••••'}{' '}
+                        USD
                       </p>
                     </div>
                   </div>
                   <ChaserSwapDrawer
+                    disabled={true}
                     trigger={
                       <Button
                         size="sm"
@@ -354,7 +365,7 @@ export default function Profile({ transactions }: Props) {
 
             {/* Theme Toggle */}
             <Card>
-              <CardContent className="p-4">
+              <CardContent className="hidden p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     {isDarkMode ? <Moon size={20} /> : <Sun size={20} />}

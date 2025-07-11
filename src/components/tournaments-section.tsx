@@ -34,6 +34,8 @@ import { formatToRelativeShort } from '@/lib/format-dates';
 import { formatNumberCompact } from '@/lib/format-number-compact';
 import { TOURNAMENT } from '@/types/types';
 
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+
 // Mock tournament data
 const mockTournaments = [
   {
@@ -397,7 +399,14 @@ export function TournamentsSection({ tournaments }: Props) {
                   <div className="rounded-lg bg-white/70 p-2">
                     <div className="mb-1 text-xs text-gray-500">Entry Fee</div>
                     <div className="flex items-center text-sm font-bold text-gray-900">
-                      <DollarSign className="mr-1 text-green-600" size={12} />
+                      <Avatar className="mr-1 h-4 w-4">
+                        <AvatarImage
+                          src={`/img/coin.png`}
+                          alt={'coin'}
+                          className="object-cover"
+                        />
+                        <AvatarFallback className="text-xs">$</AvatarFallback>
+                      </Avatar>
                       {tournament.entryFee}
                     </div>
                   </div>
