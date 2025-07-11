@@ -14,7 +14,6 @@ const fetchUser = async (privyId: string): Promise<UserResponse> => {
 
 export const useUser = () => {
   const { ready, user: privyUser } = usePrivy();
-  console.log('privy user is', privyUser);
   return useQuery<UserResponse>({
     queryKey: ['user'],
     queryFn: () => fetchUser(DEMO_USER), //privyUser!.id

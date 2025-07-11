@@ -198,12 +198,12 @@ export default function Profile({ transactions }: Props) {
   };
 
   const isSociosConnected = hasSociosWallet(user?.wallets);
-
+  const shouldRegister = !!user?.id;
   // REGISTER SOCIOS WALLET
-  useRegisterWallet({
-    userId: user?.id, // from store or auth
+  /*useRegisterWallet({
+    userId: user.id!, // from store or auth
     walletSource: 'SOCIOS',
-  });
+  });*/
 
   return (
     <div className="min-h-screen bg-gray-50 transition-colors duration-300 dark:border-gray-700 dark:bg-gray-900 md:mx-auto md:max-w-md md:border-x md:border-gray-200">
@@ -465,7 +465,7 @@ export default function Profile({ transactions }: Props) {
 
           {/* Wallet Tab */}
           <TabsContent value="wallet" className="space-y-6">
-            {isSociosConnected && address ? (
+            {isSociosConnected ? (
               <div className="space-y-6">
                 <WalletTabHeader />
                 <TokenPorfolio />

@@ -18,6 +18,7 @@ export const SERVER_URL = 'http://localhost:4000/api/v1/'; ///'https://goat-back
 export const DEMO_USER = 'cmc0cdd350000tpqwpul4us7k';
 export const MAX_ODDS_CAP = 10;
 export const CONSTANT_VIRTUAL_STAKE = 50;
+export const CHILIZ_DEMO_WALLET = '0xB5A46bC8b76FD2825AEB43db9C9e89e89158ECdE';
 
 export const SOCIAL_LINKS = [
   {

@@ -299,3 +299,18 @@ export interface UserTransactions {
   transactions: TRANSACTION[];
   pagination: PAGINATION;
 }
+
+export interface CHILIZ_TOKEN {
+  blanace: string;
+  balance_formatted: string;
+  decimals: number;
+  logo: string | null;
+  name: string;
+  native_token: boolean;
+  possible_spam: boolean;
+  symbol: string;
+  token_address: string;
+  usd_price: string;
+  usd_price_24hr_percent_change: string;
+  usd_price_24hr_usd_change: string;
+}

@@ -15,8 +15,6 @@ export default async function page({ params }: any) {
   );
   const transactions: UserTransactions = await res.json();
 
-  console.log('user transactions', transactions);
-  console.log('user id', userId);
   return (
     <div className="">
       <Profile transactions={transactions.transactions} />
