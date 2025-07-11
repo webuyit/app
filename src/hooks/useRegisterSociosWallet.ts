@@ -21,10 +21,12 @@ export const useRegisterWallet = ({
   userId,
   walletSource = 'SOCIOS',
   chain = 'CHILIZ',
+  setisWalletRegisterSuccess,
 }: {
   userId: string;
   walletSource?: string;
   chain?: string;
+  setisWalletRegisterSuccess: (arg0: boolean) => void;
 }) => {
   const { address, isConnected } = useAccount();
   const queryClient = useQueryClient();
@@ -32,7 +34,6 @@ export const useRegisterWallet = ({
   const alreadyRegistered = useRef<string | null>(null);
   const isSociosConnected = hasSociosWallet(user?.wallets);
   // if socios is connected don't register new wallet
-  if (isSociosConnected) return;
 
   // Register wallet
   const mutation = useMutation({
@@ -45,6 +46,7 @@ export const useRegisterWallet = ({
             title: 'Tournament added successfully!',
           });*/
       queryClient.invalidateQueries({ queryKey: ['user'] });
+      setisWalletRegisterSuccess(true);
     },
     onError: (error) => {
       toast({
@@ -57,7 +59,7 @@ export const useRegisterWallet = ({
   });
 
   useEffect(() => {
-    if (!userId || !address || !isConnected) return;
+    if (!userId || !address || !isConnected || isSociosConnected) return;
 
     // Prevent double execution
     if (alreadyRegistered.current === address.toLowerCase()) return;

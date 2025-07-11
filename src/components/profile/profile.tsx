@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 
 import {
   useAccountModal,
@@ -60,6 +61,7 @@ import { User } from '@/types/user';
 import { ChaserSwapDrawer } from '../chaser-swap-drawar';
 import InitUserClient from '../initUserClient';
 import TokenPorfolio from '../profile-2/token-portfolio';
+import TotalBalanceCard from '../profile-2/total-balance-card';
 import WalletQuickActions from '../profile-2/wallet-quick-actions';
 import WalletTabHeader from '../profile-2/wallet-tab-header';
 
@@ -154,11 +156,13 @@ type Props = {
 export default function Profile({ transactions }: Props) {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showBalance, setShowBalance] = useState(true);
+  const [isWalletRegisterSuccess, setisWalletRegisterSuccess] = useState(false);
   const { openConnectModal } = useConnectModal();
   const { address, isConnected } = useAccount();
   const { toast } = useToast();
   const user = useUserStore<User>((s) => s.user);
-  console.log('user from profile', user);
+  const params = useParams();
+  const userId = params.profileId as string;
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -198,12 +202,13 @@ export default function Profile({ transactions }: Props) {
   };
 
   const isSociosConnected = hasSociosWallet(user?.wallets);
-  const shouldRegister = !!user?.id;
+
   // REGISTER SOCIOS WALLET
-  /*useRegisterWallet({
-    userId: user.id!, // from store or auth
+  useRegisterWallet({
+    userId: userId, // from params
     walletSource: 'SOCIOS',
-  });*/
+    setisWalletRegisterSuccess,
+  });
 
   return (
     <div className="min-h-screen bg-gray-50 transition-colors duration-300 dark:border-gray-700 dark:bg-gray-900 md:mx-auto md:max-w-md md:border-x md:border-gray-200">
@@ -248,41 +253,10 @@ export default function Profile({ transactions }: Props) {
           {/* Profile Overview Tab */}
           <TabsContent value="profile" className="space-y-6">
             {/* Balance Card */}
-            <Card className="bg-gradient-to-br from-primary via-primary to-green-500 text-white shadow-xl">
-              <CardContent className="p-6">
-                <div className="mb-4 flex items-center justify-between">
-                  <h3 className="text-lg font-semibold opacity-90">
-                    Total Balance
-                  </h3>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setShowBalance(!showBalance)}
-                    className="h-8 w-8 p-0 text-white hover:bg-white/10"
-                  >
-                    {showBalance ? <Eye size={16} /> : <EyeOff size={16} />}
-                  </Button>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-7 w-7">
-                    <AvatarImage src={CHILIZ_LOGO} alt="Profile" />
-                    <AvatarFallback className="bg-primary text-xl font-bold text-white">
-                      JD
-                    </AvatarFallback>
-                  </Avatar>
-
-                  <div className="">
-                    <div className="mb-1 text-3xl font-bold">
-                      {showBalance ? '0.00' : '••••••'}
-                    </div>
-
-                    <div className="flex items-center text-sm opacity-80">
-                      ≈ $0.00
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <TotalBalanceCard
+              setShowBalance={setShowBalance}
+              showBalance={showBalance}
+            />
 
             {/* Chaser Balance Card */}
             <Card className="border-primary/20 from-primary/5 border-2 bg-gradient-to-r to-green-500/5">
@@ -306,7 +280,9 @@ export default function Profile({ transactions }: Props) {
                       <p className="text-xl font-bold text-gray-900 dark:text-white">
                         {showBalance ? '24,500' : '••••••'}
                       </p>
-                      <p className="text-xs text-gray-500">≈ $245.00 USD</p>
+                      <p className="text-xs text-gray-500">
+                        ≈ {showBalance ? '245.00' : '••••••'} USD
+                      </p>
                     </div>
                   </div>
                   <ChaserSwapDrawer
@@ -465,7 +441,7 @@ export default function Profile({ transactions }: Props) {
 
           {/* Wallet Tab */}
           <TabsContent value="wallet" className="space-y-6">
-            {isSociosConnected ? (
+            {isSociosConnected || isWalletRegisterSuccess ? (
               <div className="space-y-6">
                 <WalletTabHeader />
                 <TokenPorfolio />

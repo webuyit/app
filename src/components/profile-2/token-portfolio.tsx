@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Coins } from 'lucide-react';
+import { Coins, Loader2 } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useEnhancedTokens } from '@/hooks/useEnhancedTokens';
@@ -101,8 +101,13 @@ export default function TokenPorfolio() {
     error,
   } = useEnhancedTokens(walletAddress!);
 
-  console.log('enhanced tokens', data);
-  console.log('enhanced tokens error', error);
+  if (enhancedTokensLoading) {
+    return (
+      <div className="my-3 flex w-full items-center justify-center">
+        <Loader2 className="animate-spin" />
+      </div>
+    );
+  }
   return (
     <Card>
       <CardHeader>

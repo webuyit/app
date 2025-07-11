@@ -258,3 +258,34 @@ export function formatPriceChange(
     indicator: isPositive ? 'up' : isNegative ? 'down' : 'neutral',
   };
 }
+
+export const calculateTotalBalanceInUsdAndChz = async (
+  tokens: EnhancedToken[],
+): Promise<{ usd: number; chz: number }> => {
+  const totalUsd = tokens.reduce((sum, token) => sum + token.usd_value, 0);
+
+  try {
+    // Fetch CHZ price in USD from CoinGecko
+    const { data } = await axios.get(`${COINGECKO_API}/simple/price`, {
+      params: {
+        ids: 'chiliz',
+        vs_currencies: 'usd',
+      },
+    });
+
+    const chzPrice = data?.chiliz?.usd || 0;
+
+    const totalInChz = chzPrice > 0 ? totalUsd / chzPrice : 0;
+
+    return {
+      usd: parseFloat(totalUsd.toFixed(2)),
+      chz: parseFloat(totalInChz.toFixed(2)),
+    };
+  } catch (error) {
+    console.error('Failed to fetch CHZ price', error);
+    return {
+      usd: parseFloat(totalUsd.toFixed(2)),
+      chz: 0,
+    };
+  }
+};
