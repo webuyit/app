@@ -19,18 +19,24 @@ import { GatedTournamentsSection } from '../upcoming-events/gated-tournaments-se
 
 type HomeProps = {
   players: PLAYERS;
-  markets: MARKETS;
+  popularMarkets: MARKET[];
+  upcomingMarkets: MARKET[];
   tournaments: TOURNAMENTS;
 };
-export default function Home({ players, markets, tournaments }: HomeProps) {
+export default function Home({
+  players,
+  popularMarkets,
+  upcomingMarkets,
+  tournaments,
+}: HomeProps) {
   return (
     <div className="min-h-screen bg-gray-50 pb-20 md:mx-auto md:max-w-md md:border-x md:border-gray-200">
       <Header />
       <div className="overflow-x-hidden">
         <AnnouncementCarousel />
         <PlayersSection initialPlayers={players} />
-        <PopularBetsSection initialMarkets={markets} />
-        <UpcomingEventsSection initialEvevents={markets} />
+        <PopularBetsSection initialMarkets={popularMarkets} />
+        <UpcomingEventsSection initialEvevents={upcomingMarkets} />
         <TournamentsSection tournaments={tournaments.tornaments} />
 
         {/* REMOVE GATED TOURNAMENTS FOR NOW */}

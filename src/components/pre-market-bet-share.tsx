@@ -19,7 +19,10 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { getSportEmoji } from '@/lib/getSportEmoji';
 import { shareCard } from '@/lib/shareCard';
+import { useUserStore } from '@/lib/stores/useUserStore';
+import { truncateMiddle } from '@/lib/utils';
 import { BET } from '@/types/types';
+import { User } from '@/types/user';
 
 interface BetShareCardProps {
   bet: BET;
@@ -34,7 +37,7 @@ export function PreMarketBetShareCard({
   const [isGenerating, setIsGenerating] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-
+  const user = useUserStore<User>((s) => s.user);
   const isWin = true;
   const platformUrl = 'https://mygoat.fun'; // Your platform URL
 
@@ -250,12 +253,16 @@ export function PreMarketBetShareCard({
             className={`mb-4 rounded-lg p-3 ${isWin ? 'bg-green-50' : 'bg-red-50'}`}
           >
             <div
-              className={`text-sm font-medium ${isWin ? 'text-green-800' : 'text-red-800'}`}
+              className={`text-sm font-medium capitalize ${isWin ? 'text-green-800' : 'text-red-800'}`}
             >
               {/*bet.player.name}&apos;s {bet.betType*/}
               {bet.outcome.market.title}
             </div>
-            <div className="mt-1 text-sm text-gray-600">
+            <div className="mt-1 text-sm capitalize text-gray-600">
+              Match:{' '}
+              {truncateMiddle(bet.outcome.market.Match.description, 24, 5, 30)}
+            </div>
+            <div className="mt-1 text-sm capitalize text-gray-600">
               Outcome: {bet.outcome.label}
             </div>
           </div>
@@ -283,7 +290,9 @@ export function PreMarketBetShareCard({
                 </div>
                 <div>
                   <div className="mb-1 text-xs text-gray-500">Placed by</div>
-                  <div className="text-sm font-bold text-gray-900">Kabugu</div>
+                  <div className="text-sm font-bold text-gray-900">
+                    {truncateMiddle(user.fullName || 'Unknown')}
+                  </div>
                 </div>
               </div>
               <div className="mt-2 text-center">
@@ -299,7 +308,15 @@ export function PreMarketBetShareCard({
       {/* Action Button */}
       <div className="text-center">
         <Button
-          onClick={() => shareCard({ cardRef, setIsGenerating })}
+          onClick={() =>
+            shareCard({
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              //@ts-ignore
+              cardRef,
+              setIsGenerating,
+              cardType: 'pre-market',
+            })
+          }
           disabled={isGenerating}
           className="hover:bg-primary/90 rounded-xl bg-primary px-6 py-3 font-medium text-white"
         >

@@ -69,7 +69,7 @@ export interface BetMarket {
   tvl: string;
   volume24h: string;
   endDate: string;
-  createdAt: Date;
+  createdAt?: Date;
   linkedTournaments: Array<{
     id: string;
     name: string;
@@ -93,7 +93,7 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
   const [selectedOutcome, setSelectedOutcome] = useState<string | null>(null);
   const [stakeAmount, setStakeAmount] = useState<string>('');
   const [isOpen, setIsOpen] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(true);
+  const [showSuccess, setShowSuccess] = useState(false);
   const user = useUserStore<User>((s) => s.user);
   // initialize client
 
@@ -155,7 +155,9 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
       /*toast({
           title: 'Tournament added successfully!',
         });*/
-      queryClient.invalidateQueries({ queryKey: ['markets'] });
+      queryClient.invalidateQueries({
+        queryKey: ['markets/popular', 'bets', 'user'],
+      });
       setShowSuccess(true);
       setTimeout(() => {
         setShowSuccess(false);

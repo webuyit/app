@@ -12,7 +12,6 @@ export default function PrivyProviderComp({
 }: {
   children: React.ReactNode;
 }) {
-  console.log(process.env.NEXT_PUBLIC_PRIVY_APP_ID);
   return (
     <QueryClientProvider client={queryClient}>
       <PrivyProvider

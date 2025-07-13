@@ -50,3 +50,10 @@ export function simulateOddsWithUserStake(
     };
   });
 }
+
+export function calculateProfit(stake: number, odds: number): number {
+  if (stake <= 0 || odds <= 1) return 0;
+
+  const profit = stake * (odds - 1);
+  return parseFloat(profit.toFixed(2));
+}

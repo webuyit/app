@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 
+import { useParams } from 'next/navigation';
+
+import { useQuery } from '@tanstack/react-query';
 import {
   Clock,
   DollarSign,
@@ -28,9 +31,11 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { SERVER_URL } from '@/lib/constants';
 import { formatToESTTime, formatToRelativeShort } from '@/lib/format-dates';
 import { formatNumberCompact } from '@/lib/format-number-compact';
-import { BET } from '@/types/types';
+import { calculateProfit } from '@/lib/odds-calculator';
+import { BET, UserBets } from '@/types/types';
 
 import { PreMarketBetShareCard } from '../pre-market-bet-share';
 
@@ -206,6 +211,16 @@ type Props = {
   liveBets: BET[];
   openBets: BET[];
   settledBets: BET[];
+  allBets: UserBets;
+  profitToday: {
+    amount: string;
+    isPositive: boolean;
+  };
+};
+type Props2 = {
+  initialliveBets: BET[];
+  initialopenBets: BET[];
+  initialsettledBets: BET[];
   profitToday: {
     amount: string;
 
@@ -213,17 +228,39 @@ type Props = {
   };
 };
 export default function MyBets({
-  liveBets,
-  openBets,
-  settledBets,
-  profitToday,
+  //liveBets,
+  //openBets,
+  //settledBets,
+  //profitToday,
+  allBets,
 }: Props) {
   const [settledFilter, setSettledFilter] = useState('all');
-  const testNumbwers = '20.00';
+
+  const params = useParams();
+  const userId = params.userId as string;
+
   // Calculate today's profit
   const todaysProfit = mockSettledBets.reduce((total, bet) => {
     return total + parseFloat(bet.profit);
   }, 0);
+
+  const { data: response } = useQuery<UserBets>({
+    queryKey: [`bets`],
+    queryFn: async () => {
+      const res = await fetch(`${SERVER_URL}bets/user?userId=${userId}`);
+      return res.json();
+    },
+    initialData: allBets,
+    refetchInterval: 80_000, // every 30 seconds
+    refetchOnWindowFocus: false, // don't refetch when switching tabs (unless needed)
+    staleTime: 99_000, // prevents too-frequent re-fetching
+    refetchIntervalInBackground: false,
+  });
+
+  const settledBets = response.settledBets;
+  const openBets = response.openBets;
+  const liveBets = response.liveBets;
+  const profitToday = response.profitToday;
 
   // Filter settled bets based on result
   const filteredSettledBets = settledBets.filter((bet) => {
@@ -233,6 +270,10 @@ export default function MyBets({
     return true;
   });
 
+  const formatCurrency2 = (amount: number) => {
+    const num = parseFloat(amount.toString());
+    return num.toFixed(2);
+  };
   const formatCurrency = (bet: BET) => {
     // const num = typeof amount === 'string' ? parseFloat(amount) : amount;
     return (
@@ -252,7 +293,7 @@ export default function MyBets({
           </AvatarFallback>
         </Avatar>
         <span className="font-medium">
-          {formatNumberCompact(bet.potentialPayout)}
+          {formatCurrency2(bet.potentialPayout)}
         </span>
       </div>
     );
@@ -276,12 +317,10 @@ export default function MyBets({
               .substring(0, 2)}
           </AvatarFallback>
         </Avatar>
-        <span className="font-medium">{formatNumberCompact(bet.amount)}</span>
+        <span className="font-medium">{formatCurrency2(bet.amount)}</span>
       </div>
     );
   };
-
-  console.log('open bets', openBets);
 
   return (
     <div className="min-h-screen bg-gray-50 md:mx-auto md:max-w-md md:border-x md:border-gray-200">
@@ -474,14 +513,14 @@ export default function MyBets({
                     </Avatar>
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
-                        <h3 className="font-semibold text-gray-900">
+                        <h3 className="font-semibold capitalize text-gray-900">
                           {bet.outcome.market.players[0].player.name}
                         </h3>
                         <Badge variant="outline" className="text-xs">
                           {bet.oddsAtBet}
                         </Badge>
                       </div>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm capitalize text-gray-600">
                         {bet.outcome.market.players[0].player.team.name}
                       </p>
                       <p className="text-xs font-medium text-red-600">
@@ -535,7 +574,6 @@ export default function MyBets({
                       <span
                         className={`text-2xl font-bold ${profitToday.isPositive ? 'text-green-600' : 'text-red-600'}`}
                       >
-                        {profitToday.isPositive ? '+' : '-'}
                         {profitToday.amount}
                       </span>
                       {profitToday.isPositive ? (
@@ -630,7 +668,7 @@ export default function MyBets({
                       </Avatar>
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
-                          <h3 className="font-semibold text-gray-900">
+                          <h3 className="font-semibold capitalize text-gray-900">
                             {bet.outcome.market?.players[0]?.player.name}
                           </h3>
                           <div className="flex items-center space-x-2">
@@ -664,7 +702,7 @@ export default function MyBets({
                             </Dialog>
                           </div>
                         </div>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm capitalize text-gray-600">
                           {bet.outcome.market?.players[0]?.player.team.name}
                         </p>
                         <p className="text-xs text-gray-500">
@@ -674,14 +712,14 @@ export default function MyBets({
                     </div>
 
                     <div className="mb-3 rounded-lg bg-gray-50 p-3">
-                      <div className="mb-1 text-xs text-gray-600">
+                      <div className="mb-1 text-xs capitalize text-gray-600">
                         {bet?.outcome.market?.title}
                       </div>
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium capitalize text-gray-900">
                         {bet?.outcome?.market?.title}
                       </div>
-                      <div className="mt-1 text-xs text-gray-600">
-                        Result: 10 points
+                      <div className="mt-1 text-xs capitalize text-gray-600">
+                        Result: {bet.outcome.market.result || '5 Points'}
                       </div>
                     </div>
 
@@ -711,7 +749,9 @@ export default function MyBets({
                               : 'text-red-600'
                           }`}
                         >
-                          {profitToday.amount}
+                          {bet.status === 'WON'
+                            ? `+${calculateProfit(bet.amount, bet.oddsAtBet)}`
+                            : `-${calculateProfit(bet.amount, bet.oddsAtBet)}`}
                         </span>
                       </div>
                     </div>

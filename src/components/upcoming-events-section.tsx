@@ -22,13 +22,13 @@ import { MARKET, MARKETS } from '@/types/types';
 import { BettingDrawer, sampleBetMarket } from './betting-drawer';
 
 type Props = {
-  initialEvevents: MARKETS;
+  initialEvevents: MARKET[];
 };
 export function UpcomingEventsSection({ initialEvevents }: Props) {
   const { data: response } = useQuery({
-    queryKey: [`markets`],
+    queryKey: [`markets/upcoming`],
     queryFn: async () => {
-      const res = await fetch(`${SERVER_URL}markets/basic?limit=10`);
+      const res = await fetch(`${SERVER_URL}markets/upcoming?limit=10`);
       return res.json();
     },
     initialData: initialEvevents,
@@ -39,7 +39,7 @@ export function UpcomingEventsSection({ initialEvevents }: Props) {
   });
 
   const events = response?.markets ?? [];
-  // console.log('Events', events[0].Match);
+
   const formatBettorsCount = (count: number) => {
     if (count >= 1000) {
       return `${(count / 1000).toFixed(1)}K`;
@@ -145,8 +145,8 @@ export function UpcomingEventsSection({ initialEvevents }: Props) {
                     market={{
                       ...sampleBetMarket,
                       id: `market-${event.id}`,
-                      title: event.title,
-                      description: event.description,
+                      title: event.marketCategory || 'Points Over/Under',
+                      description: event.title,
                       player: {
                         name: event.players[0].player?.name || 'Unknown Player',
                         imageUrl:

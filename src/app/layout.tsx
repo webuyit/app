@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 
 import { ViewTransitions } from 'next-view-transitions';
 
+import PWAStandaloneGuard from '@/components/PWAStandaloneGuard';
 import ForceDarkMode from '@/components/auto-theme-switcher';
 import InitUserClient from '@/components/initUserClient';
 import PrivyProviderComp from '@/components/providers/privy-provider';
@@ -80,10 +81,12 @@ export default function RootLayout({
     <ViewTransitions>
       <html lang="en" suppressHydrationWarning>
         <body className={`${geistSans.variable} ${geistMono.variable} `}>
-          <PrivyProviderComp>
-            <InitUserClient />
-            <TooltipProvider>{children}</TooltipProvider>
-          </PrivyProviderComp>
+          <PWAStandaloneGuard>
+            <PrivyProviderComp>
+              <InitUserClient />
+              <TooltipProvider>{children}</TooltipProvider>
+            </PrivyProviderComp>
+          </PWAStandaloneGuard>
           <Toaster />
         </body>
       </html>

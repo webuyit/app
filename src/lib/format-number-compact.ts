@@ -7,7 +7,7 @@ type FormatOptions = {
   locale?: string; // For Intl formatting, default = 'en-US'
 };
 
-export function formatNumberCompact(
+/*export function formatNumberCompact(
   value: number,
   {
     threshold = 1000,
@@ -38,4 +38,40 @@ export function formatNumberCompact(
   }
 
   return value.toString();
+}*/
+
+export function formatNumberCompact(
+  value: number,
+  {
+    threshold = 1000,
+    decimals = 2,
+    withSuffix = true,
+    customSuffixes = {},
+    useCommas = false,
+    locale = 'en-US',
+  }: FormatOptions = {},
+): string {
+  if (useCommas) {
+    return new Intl.NumberFormat(locale).format(value);
+  }
+
+  // ✅ Return 2 decimals for numbers below threshold (e.g., < 1000)
+  if (value < threshold) {
+    return value.toFixed(decimals);
+  }
+
+  const suffixes: [number, string][] = [
+    [1e9, customSuffixes.B || 'B'],
+    [1e6, customSuffixes.M || 'M'],
+    [1e3, customSuffixes.K || 'K'],
+  ];
+
+  for (const [num, suffix] of suffixes) {
+    if (value >= num) {
+      const formatted = (value / num).toFixed(decimals);
+      return withSuffix ? `${formatted}${suffix}` : formatted;
+    }
+  }
+
+  return value.toFixed(decimals);
 }

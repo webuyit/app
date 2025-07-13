@@ -316,7 +316,15 @@ export function InstantBetShareCard({
       {/* Action Button */}
       <div className="text-center">
         <Button
-          onClick={() => shareCard({ cardRef, setIsGenerating })}
+          onClick={() =>
+            shareCard({
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              //@ts-ignore
+              cardRef,
+              setIsGenerating,
+              cardType: 'pre-market',
+            })
+          }
           disabled={isGenerating}
           className="hover:bg-primary/90 rounded-xl bg-primary px-6 py-3 font-medium text-white"
         >

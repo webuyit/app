@@ -11,7 +11,7 @@ export default async function page({ params }: any) {
     cache: 'no-store',
   });
   const bets: UserBets = await res.json();
-  console.log('user bets', bets);
+
   return (
     <div>
       <MyBets
@@ -19,6 +19,7 @@ export default async function page({ params }: any) {
         settledBets={bets.settledBets}
         profitToday={bets.profitToday}
         liveBets={bets.liveBets}
+        allBets={bets}
       />
     </div>
   );

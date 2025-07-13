@@ -7,7 +7,7 @@ import { UserResponse, UserStore } from '@/types/user';
 
 const fetchUser = async (privyId: string): Promise<UserResponse> => {
   const { data } = await axios.get<UserResponse>(
-    `${SERVER_URL}users/user/basic?userId=${privyId}`,
+    `${SERVER_URL}users/user/basic?privyId=${privyId}`,
   );
   return data;
 };
@@ -16,7 +16,7 @@ export const useUser = () => {
   const { ready, user: privyUser } = usePrivy();
   return useQuery<UserResponse>({
     queryKey: ['user'],
-    queryFn: () => fetchUser(DEMO_USER), //privyUser!.id
+    queryFn: () => fetchUser(privyUser!.id), //privyUser!.id
     enabled: ready && !!privyUser?.id,
   });
 };

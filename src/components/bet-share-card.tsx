@@ -1,6 +1,8 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+import Image from 'next/image';
 
 import { toPng } from 'html-to-image';
 import {
@@ -15,7 +17,12 @@ import QRCode from 'qrcode';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { getSportEmoji } from '@/lib/getSportEmoji';
+import { shareCard } from '@/lib/shareCard';
+import { useUserStore } from '@/lib/stores/useUserStore';
+import { truncateMiddle } from '@/lib/utils';
 import { BET } from '@/types/types';
+import { User } from '@/types/user';
 
 interface BetShareCardProps {
   bet: BET;
@@ -30,7 +37,7 @@ export function BetShareCard({
   const [isGenerating, setIsGenerating] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-
+  const user = useUserStore<User>((s) => s.user);
   const isWin = bet.status === 'WON';
   const platformUrl = 'https://athletebet.app'; // Your platform URL
 
@@ -50,6 +57,14 @@ export function BetShareCard({
       console.error('Error generating QR code:', error);
     }
   };
+
+  useEffect(() => {
+    //setIsGenerating(true);
+    const handleAutoGnerate = async () => {
+      await generateQRCode();
+    };
+    handleAutoGnerate();
+  }, []);
 
   // Generate and download card as image
   const downloadCard = async () => {
@@ -93,9 +108,10 @@ export function BetShareCard({
       setIsGenerating(false);
     }
   };
-
+  //
   const formatDate = (dateString: Date) => {
-    return dateString.toLocaleDateString('en-US', {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
       weekday: 'short',
       month: 'short',
       day: 'numeric',
@@ -140,19 +156,20 @@ export function BetShareCard({
         </div>
 
         {/* Header */}
-        <div className="relative p-6 pb-4">
+        <div className="relative p-4 pb-2">
           <div className="mb-4 flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
-                <Trophy className="text-gray-800" size={16} />
+            <div className="flex items-center space-x-1">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full">
+                <Image
+                  src={`/img/logo.png`}
+                  width={40}
+                  height={40}
+                  alt="logo"
+                  className=""
+                />
               </div>
-              <span className="text-lg font-bold text-white">AthleteBet</span>
+              <span className="text-lg font-bold text-white">GOAT</span>
             </div>
-            {isWin ? (
-              <TrendingUp className="text-white" size={24} />
-            ) : (
-              <TrendingDown className="text-white" size={24} />
-            )}
           </div>
 
           <div className="mb-4 flex items-center space-x-3">
@@ -167,23 +184,40 @@ export function BetShareCard({
           </div>
 
           {/* Mascot/Character placeholder */}
+          {/* Mascot/Character placeholder */}
           <div className="absolute right-4 top-4">
             <div
-              className={`flex h-16 w-16 items-center justify-center rounded-full ${
+              className={`flex items-center justify-center rounded-full ${
                 isWin ? 'bg-white/20' : 'bg-white/20'
               }`}
             >
-              {isWin ? '🎉' : '😢'}
+              {isWin ? (
+                <Image
+                  src={`/img/wojak-win.png`}
+                  width={70}
+                  height={70}
+                  alt="moscout"
+                  className="object-cover"
+                />
+              ) : (
+                <Image
+                  src={`/img/wojak-loss.png`}
+                  width={70}
+                  height={70}
+                  alt="moscout"
+                  className="object-cover"
+                />
+              )}
             </div>
           </div>
         </div>
 
         {/* Main Content Card */}
-        <div className="relative mx-4 mb-6 rounded-2xl bg-white p-6 shadow-lg">
+        <div className="relative mx-3 mb-3 rounded-2xl bg-white p-2 shadow-lg">
           {/* User Info */}
           <div className="mb-4 flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Avatar className="h-12 w-12">
+            <div className="flex items-center space-x-1">
+              <Avatar className="h-14 w-14">
                 <AvatarImage
                   src={bet.outcome.market.players[0].player.profilePicture}
                   alt={bet.outcome.market.players[0].player.name}
@@ -197,29 +231,24 @@ export function BetShareCard({
                     .substring(0, 2)}
                 </AvatarFallback>
               </Avatar>
+
               <div>
-                <div className="font-bold text-gray-900">@{userName}</div>
-                <div className="text-sm text-gray-600">
+                <div className="text-lg font-semibold capitalize text-gray-900">
                   {bet.outcome.market.players[0].player.name}
                 </div>
               </div>
             </div>
             <div className="text-gray-400">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-              </svg>
+              <p className="text-2xl">
+                {getSportEmoji(bet.outcome.market.Match.category)}
+              </p>
             </div>
           </div>
 
           {/* Payout Amount */}
           <div className="mb-4 text-center">
             <div
-              className={`mb-1 text-sm font-medium ${isWin ? 'text-green-600' : 'text-red-600'}`}
+              className={`mb-1 font-medium ${isWin ? 'text-green-600' : 'text-red-600'}`}
             >
               Payout
             </div>
@@ -230,9 +259,13 @@ export function BetShareCard({
             >
               {isWin ? '+' : '-'}
               {formatCurrency(isWin ? bet.potentialPayout : bet.amount)}
-              <div className="ml-2 flex h-8 w-8 items-center justify-center rounded-full bg-yellow-400">
-                <span className="text-sm text-yellow-800">💰</span>
-              </div>
+              <Image
+                src={`/img/coin.png`}
+                width={40}
+                height={40}
+                alt="coin"
+                className="h-7 w-7"
+              />
             </div>
           </div>
 
@@ -241,14 +274,17 @@ export function BetShareCard({
             className={`mb-4 rounded-lg p-3 ${isWin ? 'bg-green-50' : 'bg-red-50'}`}
           >
             <div
-              className={`text-sm font-medium ${isWin ? 'text-green-800' : 'text-red-800'}`}
+              className={`text-sm font-medium capitalize ${isWin ? 'text-green-800' : 'text-red-800'}`}
             >
-              {bet.outcome.market.title}
+              {truncateMiddle(bet.outcome.market.title, 24, 5, 30)}
             </div>
-            <div className="mt-1 text-sm text-gray-600">
-              Bet: {bet.outcome.market.description}
+            <div className="mt-1 text-sm capitalize text-gray-600">
+              Match:{' '}
+              {truncateMiddle(bet.outcome.market.Match.description, 24, 5, 30)}
             </div>
-            <div className="mt-1 text-xs text-gray-500">Result: 30 Points</div>
+            <div className="mt-1 text-xs capitalize text-gray-500">
+              Result: {bet.outcome.market.result || '10 Points'}
+            </div>
           </div>
 
           {/* Bottom Row with QR and Details */}
@@ -275,12 +311,12 @@ export function BetShareCard({
                 <div>
                   <div className="mb-1 text-xs text-gray-500">Placed by</div>
                   <div className="text-sm font-bold text-gray-900">
-                    {userName}
+                    {truncateMiddle(user.fullName || 'Unknown')}
                   </div>
                 </div>
               </div>
               <div className="mt-2 text-center">
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-muted-foreground">
                   On {formatDate(bet.createdAt)}
                 </div>
               </div>
@@ -292,7 +328,15 @@ export function BetShareCard({
       {/* Action Button */}
       <div className="text-center">
         <Button
-          onClick={downloadCard}
+          onClick={() =>
+            shareCard({
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              //@ts-ignore
+              cardRef,
+              setIsGenerating,
+              cardType: isWin ? 'win' : 'loss',
+            })
+          }
           disabled={isGenerating}
           className="hover:bg-primary/90 rounded-xl bg-primary px-6 py-3 font-medium text-white"
         >

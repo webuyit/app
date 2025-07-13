@@ -14,7 +14,7 @@ import { FaDiscord, FaGlobe, FaTelegram, FaTwitter } from 'react-icons/fa';
 
 import { ANNOUNCEMENTS_TYPE, MARKET } from '@/types/types';
 
-export const SERVER_URL = 'http://localhost:4000/api/v1/'; ///'https://goat-back-end.onrender.com/api/v1/';
+export const SERVER_URL = 'https://goat-back-end.onrender.com/api/v1/'; //'http://localhost:4000/api/v1/'; ;
 export const DEMO_USER = 'cmc0cdd350000tpqwpul4us7k';
 export const MAX_ODDS_CAP = 10;
 export const CONSTANT_VIRTUAL_STAKE = 50;
@@ -104,10 +104,25 @@ export const announcements: ANNOUNCEMENTS_TYPE[] = [
 ];
 
 export const socialLinks = [
-  { name: 'Discord', icon: FaDiscord, color: '#5865F2', href: '#' },
-  { name: 'Twitter', icon: FaTwitter, color: '#1DA1F2', href: '#' },
-  { name: 'Telegram', icon: FaTelegram, color: '#0088CC', href: '#' },
-  { name: 'Website', icon: FaGlobe, color: '#6B7280', href: '#' },
+  {
+    name: 'Discord',
+    icon: FaDiscord,
+    color: '#5865F2',
+    href: 'https://discord.gg/2xCT9j5MR2',
+  },
+  {
+    name: 'Twitter',
+    icon: FaTwitter,
+    color: '#1DA1F2',
+    href: 'https://x.com/goat_w3',
+  },
+  //{ name: 'Telegram', icon: FaTelegram, color: '#0088CC', href: '' },
+  {
+    name: 'Website',
+    icon: FaGlobe,
+    color: '#6B7280',
+    href: 'https://www.mygoat.fun/',
+  },
 ];
 
 export const tutorials = [

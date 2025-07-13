@@ -100,8 +100,10 @@ export interface MARKET {
   id: string;
   title: string;
   description: string;
+  marketCategory: string;
   coverUrl: string;
   isHot: boolean;
+  result: string | null;
   isFeatured: boolean;
   category: 'ESPORT' | 'FOOTBALL' | 'BASEBALL' | 'SOCCER' | 'FANTASY';
   status:

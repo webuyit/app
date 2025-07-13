@@ -2,7 +2,11 @@
 
 import React, { useState } from 'react';
 
+import { usePrivy } from '@privy-io/react-auth';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import { AlertCircle, CheckCircle, Lock, Shield, Sparkles } from 'lucide-react';
+import { useTransitionRouter } from 'next-view-transitions';
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -19,39 +23,58 @@ import {
   InputOTPSlot,
 } from '@/components/ui/input-otp';
 import { toast } from '@/hooks/use-toast';
+import { SERVER_URL } from '@/lib/constants';
 
+type SUBMIT_CODE_TYPES = {
+  privyId: string;
+  code: string;
+};
 const AccessCodeEntry = () => {
   const [accessCode, setAccessCode] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [submitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState('');
+  const router = useTransitionRouter();
+  const queryClient = useQueryClient();
+  const { ready, authenticated, user, logout } = usePrivy();
+
+  const mutation = useMutation({
+    mutationFn: async (data: SUBMIT_CODE_TYPES) => {
+      const res = await axios.post(`${SERVER_URL}users/submit-code`, data);
+      return res.data;
+    },
+    onSuccess: () => {
+      toast({
+        title: 'Access Granted! 🎉',
+        description: 'Welcome to GOAt. Redirecting...',
+      });
+      queryClient.invalidateQueries({ queryKey: ['user'] });
+      setIsSubmitted(true);
+      router.replace('/home');
+    },
+    onError: (error) => {
+      setError('Invalid access code. Please check and try again.');
+
+      console.log('Mutation error', error);
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!ready || !user) {
+      return;
+    }
     if (!accessCode.trim() || accessCode.length < 6) {
       setError('Please enter a complete 6-digit access code');
       return;
     }
 
-    setIsLoading(true);
+    //setIsLoading(true);
     setError('');
-
-    // Simulate API call
-    setTimeout(() => {
-      if (
-        accessCode.toLowerCase() === 'xcyxy' ||
-        accessCode.toLowerCase() === 'weuyb'
-      ) {
-        toast({
-          title: 'Access Granted! 🎉',
-          description: 'Welcome to Lovabler. Redirecting to your dashboard...',
-        });
-        console.log('Access granted for code:', accessCode);
-      } else {
-        setError('Invalid access code. Please check and try again.');
-      }
-      setIsLoading(false);
-    }, 1500);
+    mutation.mutate({
+      privyId: user.id,
+      code: accessCode,
+    });
   };
 
   const handleCodeChange = (value: string) => {
@@ -104,7 +127,7 @@ const AccessCodeEntry = () => {
                       maxLength={6}
                       value={accessCode}
                       onChange={handleCodeChange}
-                      disabled={isLoading}
+                      disabled={mutation.isPending || submitted}
                       className="gap-2"
                     >
                       <InputOTPGroup className="gap-2">
@@ -178,10 +201,12 @@ const AccessCodeEntry = () => {
 
               <Button
                 type="submit"
-                disabled={isLoading || accessCode.length < 6}
+                disabled={
+                  mutation.isPending || submitted || accessCode.length < 6
+                }
                 className="hover:from-brand-lime-dark hover:to-brand-lime h-14 w-full transform rounded-xl text-lg font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl active:scale-[0.98] disabled:transform-none disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-md"
               >
-                {isLoading ? (
+                {mutation.isPending ? (
                   <div className="flex items-center gap-3">
                     <div className="border-3 h-6 w-6 animate-spin rounded-full border-white/30 border-t-white" />
                     Verifying Access...
@@ -189,7 +214,7 @@ const AccessCodeEntry = () => {
                 ) : (
                   <div className="flex items-center gap-3">
                     <CheckCircle className="h-6 w-6" />
-                    Enter GOATs Arena
+                    Submit
                   </div>
                 )}
               </Button>
@@ -200,14 +225,18 @@ const AccessCodeEntry = () => {
                 <p className="text-sm text-gray-600">
                   Don&apos;t have a code?{' '}
                   <button
-                    onClick={() => openInNewTab('https://discord.gg/pGzpYGuM')}
+                    onClick={() =>
+                      openInNewTab('https://discord.gg/2xCT9j5MR2')
+                    }
                     className="text-brand-lime hover:text-brand-lime-dark font-medium underline underline-offset-2 transition-colors duration-200 hover:underline-offset-4"
                   >
                     Join our discord
                   </button>
                 </p>
               </div>
-
+              <Button onClick={() => logout()} className="hidden">
+                Logout
+              </Button>
               <div className="from-brand-lime/10 via-brand-lime/5 to-brand-lime/10 border-brand-lime/20 hidden rounded-xl border bg-gradient-to-r p-4">
                 <p className="text-center text-xs leading-relaxed text-gray-600">
                   🎯 <strong>Demo codes:</strong> Try{' '}

@@ -12,7 +12,6 @@ export default async function page({ params }: any) {
   });
   const player = await res.json();
 
-  console.log('Player', player);
   return (
     <div>
       <PlayerProfile player={player} />

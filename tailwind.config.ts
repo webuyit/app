@@ -79,15 +79,76 @@ export default {
             height: '0',
           },
         },
-      },
-      'pulse-lime': {
-        '0%, 100%': {
-          boxShadow: '0 0 0 0 oklch(76.8% 0.233 130.85 / 0.7)',
+        'fade-in': {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(20px)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0)',
+          },
         },
-        '50%': {
-          boxShadow: '0 0 0 10px oklch(76.8% 0.233 130.85 / 0)',
+        'scale-in': {
+          '0%': {
+            transform: 'scale(0.95)',
+            opacity: '0',
+          },
+          '100%': {
+            transform: 'scale(1)',
+            opacity: '1',
+          },
+        },
+        float: {
+          '0%, 100%': {
+            transform: 'translateY(0px)',
+          },
+          '50%': {
+            transform: 'translateY(-10px)',
+          },
+        },
+        glitch: {
+          '0%, 100%': {
+            transform: 'translateX(0)',
+          },
+          '10%': {
+            transform: 'translateX(-2px)',
+          },
+          '20%': {
+            transform: 'translateX(2px)',
+          },
+          '30%': {
+            transform: 'translateX(-2px)',
+          },
+          '40%': {
+            transform: 'translateX(2px)',
+          },
+          '50%': {
+            transform: 'translateX(-2px)',
+          },
+          '60%': {
+            transform: 'translateX(2px)',
+          },
+          '70%': {
+            transform: 'translateX(-2px)',
+          },
+          '80%': {
+            transform: 'translateX(2px)',
+          },
+          '90%': {
+            transform: 'translateX(-2px)',
+          },
+        },
+        'pulse-lime': {
+          '0%, 100%': {
+            boxShadow: '0 0 0 0 oklch(76.8% 0.233 130.85 / 0.7)',
+          },
+          '50%': {
+            boxShadow: '0 0 0 10px oklch(76.8% 0.233 130.85 / 0)',
+          },
         },
       },
+
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',

@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+import Image from 'next/image';
+
 import { useLogin, usePrivy } from '@privy-io/react-auth';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
@@ -80,10 +82,20 @@ export default function OnboardingScreen() {
       const res = await axios.post(`${SERVER_URL}users/register`, data);
       return res.data;
     },
-    onSuccess: (info) => {
+    onSuccess: async (info) => {
       console.log('Created account succfully', info);
 
-      router.replace('/home');
+      // Check early access
+      const res = await axios.get(
+        `${SERVER_URL}users/early-access?userId=${info?.userId}`,
+      );
+
+      const { earlyAccess } = res.data;
+      if (earlyAccess) {
+        router.replace('/home');
+      } else {
+        router.replace('/access-code');
+      }
     },
     onError: (err) => {
       toast({
@@ -152,11 +164,15 @@ export default function OnboardingScreen() {
       <div className="relative z-10 flex h-screen flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-6">
-          <div className="flex items-center space-x-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <Target size={20} className="text-white" />
-            </div>
-            <span className="text-xl font-bold">AthleteBet</span>
+          <div className="flex items-center space-x-1">
+            <Image
+              src={`/img/logo.png`}
+              width={40}
+              height={40}
+              alt="logo"
+              className=""
+            />
+            <span className="text-xl font-bold">GOAT</span>
           </div>
           <div className="flex items-center space-x-2">
             <div className="bg-primary/20 border-primary/30 rounded-full border px-3 py-1">
@@ -174,7 +190,7 @@ export default function OnboardingScreen() {
             <Button
               onClick={login}
               size="lg"
-              className="hover:from-primary/90 shadow-primary/25 w-full transform rounded-xl bg-gradient-to-r from-primary to-green-500 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] hover:to-green-500/90 active:scale-[0.98]"
+              className="hover:from-primary/90 mx-auto w-full rounded-xl bg-gradient-to-r from-primary to-green-500 py-4 font-semibold text-white shadow-lg duration-300 hover:scale-[1.02] hover:to-green-500/90 active:scale-[0.98]"
               disabled={mutation.isPending}
             >
               {mutation.isPending ? (

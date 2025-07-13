@@ -16,16 +16,17 @@ import { Card, CardContent } from '@/components/ui/card';
 import { SERVER_URL } from '@/lib/constants';
 import { formatNumberCompact } from '@/lib/format-number-compact';
 import { getHighestOdds } from '@/lib/getHighestOdds';
+import { truncateMiddle } from '@/lib/utils';
 import { MARKET, MARKETS } from '@/types/types';
 
 type MarketsProps = {
-  initialMarkets: MARKETS;
+  initialMarkets: MARKET[];
 };
 export function PopularBetsSection({ initialMarkets }: MarketsProps) {
   const { data: response } = useQuery({
-    queryKey: [`markets`],
+    queryKey: [`markets/popular`],
     queryFn: async () => {
-      const res = await fetch(`${SERVER_URL}markets/basic?limit=10`);
+      const res = await fetch(`${SERVER_URL}markets/popular?limit=10`);
       return res.json();
     },
     initialData: initialMarkets,
@@ -41,10 +42,27 @@ export function PopularBetsSection({ initialMarkets }: MarketsProps) {
     if (num >= 1000) {
       return `${(num / 1000).toFixed(2)}K`;
     }
-    return `${num.toFixed(0)}`;
+    return `${num.toFixed(2)}`;
   };
 
   const markets = response?.markets ?? [];
+
+  const formatCurrency = (amount: number) => {
+    // const num = typeof amount === 'string' ? parseFloat(amount) : amount;
+    return (
+      <div className="flex items-center space-x-0.5">
+        <Avatar className="h-3.5 w-3.5">
+          <AvatarImage
+            src={`/img/coin.png`}
+            alt={'coin'}
+            className="object-cover"
+          />
+          <AvatarFallback className="text-xs">$</AvatarFallback>
+        </Avatar>
+        <span className="font-medium">{formatNumberCompact(amount)}</span>
+      </div>
+    );
+  };
 
   return (
     <section className="px-4 py-4">
@@ -52,7 +70,7 @@ export function PopularBetsSection({ initialMarkets }: MarketsProps) {
         <h2 className="text-lg font-semibold text-gray-900">Popular Bets</h2>
         <Button
           variant="ghost"
-          className="h-auto p-0 text-sm font-medium text-primary hover:bg-transparent"
+          className="hidden h-auto p-0 text-sm font-medium text-primary hover:bg-transparent"
         >
           View All
         </Button>
@@ -119,48 +137,30 @@ export function PopularBetsSection({ initialMarkets }: MarketsProps) {
                     <div className="mb-1 text-xs text-gray-500">
                       Total Locked
                     </div>
-                    <div className="flex items-center space-x-0">
-                      <Avatar className="h-4 w-4">
-                        <AvatarImage
-                          src={`/img/coin.png`}
-                          alt={'coin'}
-                          className="object-cover"
-                        />
-                        <AvatarFallback className="text-xs">
-                          {bet.players[0]?.player?.name
-                            ?.split(' ')
-                            .map((n: string) => n[0])
-                            .join('')
-                            .substring(0, 2)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="text-sm font-semibold text-gray-900">
-                        {formatTotalLocked(bet.totalPools.toString())}
-                      </div>
-                    </div>
+                    {formatCurrency(bet.totalPools)}
                   </div>
                 </div>
                 <div className="mb-3 rounded-lg bg-gray-50 p-3">
                   <div className="mb-1 text-xs capitalize text-gray-600">
-                    {bet.title}
+                    {bet.marketCategory || 'Goals Count over/under'}
                   </div>
                   <div className="text-sm font-medium capitalize text-gray-900">
-                    {bet.description}
+                    {truncateMiddle(bet.title, 25, 6, 31)}
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-1">
                     <span className="text-xs text-gray-500">Odds:</span>
                     <span className="text-sm font-semibold text-primary">
-                      {getHighestOdds(bet.outcomes)}
+                      {getHighestOdds(bet.outcomes)}x
                     </span>
                   </div>
                   <BettingDrawer
                     market={{
                       ...sampleBetMarket,
                       id: `market-${bet.id}`,
-                      title: bet.title,
-                      description: bet.description,
+                      title: bet.marketCategory || 'Goals count over/under',
+                      description: bet.title,
                       player: {
                         name: bet.players[0].player?.name || 'Unknown Player',
                         imageUrl:

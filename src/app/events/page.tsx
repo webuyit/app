@@ -10,7 +10,6 @@ export default async function page() {
   });
   const markets = await res.json();
 
-  console.log('markets', markets);
   return (
     <div>
       <UpcomingEvents initialMarkets={markets} />
