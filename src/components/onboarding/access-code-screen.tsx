@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp';
 import { AlertCircle, CheckCircle, Lock, Shield, Sparkles } from 'lucide-react';
 import { useTransitionRouter } from 'next-view-transitions';
 
@@ -129,6 +130,7 @@ const AccessCodeEntry = () => {
                       onChange={handleCodeChange}
                       disabled={mutation.isPending || submitted}
                       className="gap-2"
+                      pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
                     >
                       <InputOTPGroup className="gap-2">
                         <InputOTPSlot

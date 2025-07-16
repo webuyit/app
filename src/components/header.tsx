@@ -6,14 +6,17 @@ import { Bell, Trophy, User as UserIcon } from 'lucide-react';
 import { Link, useTransitionRouter } from 'next-view-transitions';
 
 import { Button } from '@/components/ui/button';
+import { useUser } from '@/hooks/useUser';
 import { COIN_URL } from '@/lib/constants';
 import { useUserStore } from '@/lib/stores/useUserStore';
 import { UserStats } from '@/types/types';
 import { User } from '@/types/user';
 
 export function Header() {
-  const user = useUserStore<User>((s) => s.user);
-  const stats = useUserStore<UserStats>((s) => s.stats);
+  //const user = useUserStore<User>((s) => s.user);
+  // const stats = useUserStore<UserStats>((s) => s.stats);
+  const { data } = useUser();
+
   const router = useTransitionRouter();
   return (
     <header className="sticky top-0 z-40 flex items-center justify-between bg-white px-4 py-3 shadow-sm">
@@ -36,7 +39,7 @@ export function Header() {
               className=""
             />
             <p className="text-xs text-muted-foreground">
-              {user ? user.faucetPoints.toFixed(2) : 0.0}
+              {data ? data.user.faucetPoints.toFixed(2) : 0.0}
             </p>
           </div>
         </div>

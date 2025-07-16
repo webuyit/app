@@ -15,8 +15,9 @@ const fetchUser = async (privyId: string): Promise<UserResponse> => {
 export const useUser = () => {
   const { ready, user: privyUser } = usePrivy();
   return useQuery<UserResponse>({
-    queryKey: ['user'],
+    queryKey: ['user', privyUser?.id],
     queryFn: () => fetchUser(privyUser!.id), //privyUser!.id
     enabled: ready && !!privyUser?.id,
+    staleTime: 0, // optional: always refetch if invalidated
   });
 };

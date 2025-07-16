@@ -14,7 +14,7 @@ import { FaDiscord, FaGlobe, FaTelegram, FaTwitter } from 'react-icons/fa';
 
 import { ANNOUNCEMENTS_TYPE, MARKET } from '@/types/types';
 
-export const SERVER_URL = 'https://goat-back-end.onrender.com/api/v1/'; //'http://localhost:4000/api/v1/'; ;
+export const SERVER_URL = 'https://goat-back-end.onrender.com/api/v1/'; //'http://localhost:4000/api/v1/';
 export const DEMO_USER = 'cmc0cdd350000tpqwpul4us7k';
 export const MAX_ODDS_CAP = 10;
 export const CONSTANT_VIRTUAL_STAKE = 50;

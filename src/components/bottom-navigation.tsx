@@ -8,28 +8,30 @@ import { FaHouseUser } from 'react-icons/fa';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useUser } from '@/hooks/useUser';
 import { useUserStore } from '@/lib/stores/useUserStore';
 import { User, UserStats } from '@/types/user';
 
 export function BottomNavigation() {
   const pathname = usePathname();
   //const { user, stats } = useUserStore();
-  const user = useUserStore<User>((s) => s.user);
-  const stats = useUserStore<UserStats>((s) => s.stats);
+  //const user = useUserStore<User>((s) => s.user);
+  // const stats = useUserStore<UserStats>((s) => s.stats);
 
+  const { data } = useUser();
   const navItems = [
     { path: '/', icon: Home, label: 'Home' },
     { path: '/explore', icon: Search, label: 'Explore' },
     {
-      path: `/contracts/${user?.id}`,
+      path: `/contracts/${data?.user?.id}`,
       icon: Ticket,
       label: 'My Bets',
-      badge: stats.betsCount,
+      badge: data?.stats.betsCount,
     },
-    { path: `/profile/${user?.id}`, icon: UserIcon, label: 'Profile' },
+    { path: `/profile/${data?.user?.id}`, icon: UserIcon, label: 'Profile' },
   ];
 
-  console.log('User from bottom nav', user?.id);
+  console.log('User from bottom nav', data?.user?.id);
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-10 border-t border-gray-200 bg-white md:mx-auto md:max-w-md">
       <div className="flex items-center justify-around py-2">

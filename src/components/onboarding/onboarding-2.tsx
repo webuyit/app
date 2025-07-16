@@ -181,10 +181,8 @@ export default function OnboardingScreen() {
           </div>
         </div>
 
-        {/* Swiper Container */}
-
         {/* Bottom Section */}
-        <div className="flex h-full flex-col items-end justify-end">
+        <div className="flex h-full flex-col items-center justify-end">
           <div className="space-y-6 p-6">
             {/* Get Started Button */}
             <Button

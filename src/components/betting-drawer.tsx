@@ -37,6 +37,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { toast } from '@/hooks/use-toast';
 import { DEMO_USER, SERVER_URL } from '@/lib/constants';
+import { formatNumberCompact } from '@/lib/format-number-compact';
 import { getPayoutDetails } from '@/lib/getPayout-details';
 import {
   OutcomeWithSimulation,
@@ -152,9 +153,6 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
       return res.data;
     },
     onSuccess: () => {
-      /*toast({
-          title: 'Tournament added successfully!',
-        });*/
       queryClient.invalidateQueries({
         queryKey: ['markets/popular', 'bets', 'user'],
       });
@@ -164,7 +162,7 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
         setIsOpen(false);
         setStakeAmount('');
         setSelectedOutcome(null);
-      }, 7000);
+      }, 10000);
     },
     onError: (error) => {
       toast({
@@ -406,9 +404,15 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
                   {/* Stake Input */}
                   {selectedOutcome && (
                     <div className="space-y-3">
-                      <Label className="text-sm font-medium text-gray-900 dark:text-white">
-                        Stake Amount
-                      </Label>
+                      <div className="flex items-center justify-between">
+                        <Label className="text-sm font-medium text-gray-900 dark:text-white">
+                          Stake Amount
+                        </Label>
+                        <Label className="text-sm font-medium text-gray-900 dark:text-white">
+                          <span className="text-sm">Balance</span>{' '}
+                          {formatNumberCompact(user.faucetPoints)}
+                        </Label>
+                      </div>
                       <div className="relative">
                         <DollarSign
                           size={16}
@@ -418,10 +422,20 @@ export function BettingDrawer({ market, trigger }: BettingDrawerProps) {
                           type="number"
                           placeholder="0.00"
                           value={stakeAmount}
-                          onChange={(e) => setStakeAmount(e.target.value)}
+                          onChange={(e) => {
+                            const value = parseFloat(e.target.value);
+                            if (isNaN(value) || value < 0) {
+                              setStakeAmount('');
+                            } else if (value > user.faucetPoints) {
+                              setStakeAmount(user.faucetPoints.toString());
+                            } else {
+                              setStakeAmount(e.target.value);
+                            }
+                          }}
                           className="pl-10 text-lg font-medium"
                           step="0.01"
                           min="0"
+                          max={user.faucetPoints}
                         />
                       </div>
 
