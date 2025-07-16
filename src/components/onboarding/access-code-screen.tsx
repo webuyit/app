@@ -134,6 +134,7 @@ const AccessCodeEntry = () => {
                     >
                       <InputOTPGroup className="gap-2">
                         <InputOTPSlot
+                          inputMode="text"
                           index={0}
                           className={`h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-300 ${
                             error
@@ -142,6 +143,7 @@ const AccessCodeEntry = () => {
                           } hover:border-brand-lime-light data-[has-value=true]:border-brand-lime data-[has-value=true]:bg-brand-lime/5 hover:shadow-md`}
                         />
                         <InputOTPSlot
+                          inputMode="text"
                           index={1}
                           className={`h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-300 ${
                             error
@@ -150,6 +152,7 @@ const AccessCodeEntry = () => {
                           } hover:border-brand-lime-light data-[has-value=true]:border-brand-lime data-[has-value=true]:bg-brand-lime/5 hover:shadow-md`}
                         />
                         <InputOTPSlot
+                          inputMode="text"
                           index={2}
                           className={`h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-300 ${
                             error
@@ -158,6 +161,7 @@ const AccessCodeEntry = () => {
                           } hover:border-brand-lime-light data-[has-value=true]:border-brand-lime data-[has-value=true]:bg-brand-lime/5 hover:shadow-md`}
                         />
                         <InputOTPSlot
+                          inputMode="text"
                           index={3}
                           className={`h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-300 ${
                             error
@@ -166,6 +170,7 @@ const AccessCodeEntry = () => {
                           } hover:border-brand-lime-light data-[has-value=true]:border-brand-lime data-[has-value=true]:bg-brand-lime/5 hover:shadow-md`}
                         />
                         <InputOTPSlot
+                          inputMode="text"
                           index={4}
                           className={`h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-300 ${
                             error
@@ -174,6 +179,7 @@ const AccessCodeEntry = () => {
                           } hover:border-brand-lime-light data-[has-value=true]:border-brand-lime data-[has-value=true]:bg-brand-lime/5 hover:shadow-md`}
                         />
                         <InputOTPSlot
+                          inputMode="text"
                           index={5}
                           className={`h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-300 ${
                             error

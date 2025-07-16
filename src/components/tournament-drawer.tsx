@@ -37,6 +37,7 @@ import {
 } from '@/components/ui/drawer';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { MARKET } from '@/types/types';
 
 interface TournamentMarket {
   id: string;
@@ -117,6 +118,7 @@ export function TournamentDrawer({
     }
   };
 
+  console.log('Tournament', tournament);
   const getTournamentTheme = (type: string) => {
     switch (type) {
       case 'OPEN':
@@ -466,6 +468,7 @@ export function TournamentDrawer({
                             }}
                             trigger={
                               <Button
+                                disabled={true}
                                 size="sm"
                                 className="hover:bg-primary/90 w-full bg-primary text-xs text-white"
                               >
@@ -730,28 +733,29 @@ export const sampleTournament: Tournament = {
   markets: [
     {
       id: 'market-1',
-      title: 'Will LeBron score over 25.5 points?',
-      description: 'LeBron James next game points prediction',
+      title: 'Max vs Poirier III – Who Ends the Trilogy?',
+      description: 'Holloway seeks redemption, Poirier defends his legacy',
       player: {
-        name: 'LeBron James',
+        name: 'Poirier III',
         imageUrl: '/api/placeholder/48/48',
-        sport: 'Basketball',
-        team: 'Lakers',
+        sport: 'UFC',
+        team: 'UFC',
       },
       odds: '1.85x',
       tvl: '$45,230',
       participants: 892,
-      type: 'over_under',
+      type: 'Method of Victory — KO/TKO',
     },
     {
       id: 'market-2',
-      title: 'Will Stephen Curry hit 6+ threes?',
-      description: 'Stephen Curry three-pointers prediction',
+      title: 'Will Max Holloway get his revenge on July 19?',
+      description:
+        'does Blessed finally break the curse and even the score in the trilogy?',
       player: {
-        name: 'Stephen Curry',
+        name: 'Max Holloway',
         imageUrl: '/api/placeholder/48/48',
-        sport: 'Basketball',
-        team: 'Warriors',
+        sport: 'UFC',
+        team: 'UFC',
       },
       odds: '2.1x',
       tvl: '$32,150',
@@ -760,10 +764,10 @@ export const sampleTournament: Tournament = {
     },
     {
       id: 'market-3',
-      title: 'Will Kevin Durant score 30+ points?',
-      description: 'Kevin Durant scoring prediction',
+      title: 'Will Dustin Poirier win by KO/TKO?',
+      description: 'will The Diamond shut the door with a finish once again?',
       player: {
-        name: 'Kevin Durant',
+        name: 'Dustin Poirier',
         imageUrl: '/api/placeholder/48/48',
         sport: 'Basketball',
         team: 'Suns',

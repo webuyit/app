@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
         pathname: '/**', // ✅ this is required
       },
       {
-        protocol: 'http',
+        protocol: 'https',
         hostname: 'res.cloudinary.com',
         pathname: '/**', // ✅ this is required
       },

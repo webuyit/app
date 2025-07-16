@@ -276,9 +276,9 @@ export function BetShareCard({
             <div
               className={`text-sm font-medium capitalize ${isWin ? 'text-green-800' : 'text-red-800'}`}
             >
-              {truncateMiddle(bet.outcome.market.title, 24, 5, 30)}
+              {bet.outcome.market.title}
             </div>
-            <div className="mt-1 text-sm capitalize text-gray-600">
+            <div className="mt-1 hidden text-sm capitalize text-gray-600">
               Match:{' '}
               {truncateMiddle(bet.outcome.market.Match.description, 24, 5, 30)}
             </div>

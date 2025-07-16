@@ -439,10 +439,10 @@ export default function MyBets({
 
                   <div className="mb-3 rounded-lg bg-gray-50 p-3">
                     <div className="mb-1 text-xs capitalize text-gray-600">
-                      {bet?.outcome?.market?.title}
+                      {bet?.outcome?.market?.marketCategory}
                     </div>
                     <div className="text-sm font-medium capitalize text-gray-900">
-                      {bet?.outcome?.market?.Match?.description}
+                      {bet?.outcome?.market?.title}
                     </div>
                   </div>
 

@@ -258,7 +258,7 @@ export function PreMarketBetShareCard({
               {/*bet.player.name}&apos;s {bet.betType*/}
               {bet.outcome.market.title}
             </div>
-            <div className="mt-1 text-sm capitalize text-gray-600">
+            <div className="text-gray-600ss mt-1 hidden text-sm capitalize">
               Match:{' '}
               {truncateMiddle(bet.outcome.market.Match.description, 24, 5, 30)}
             </div>

@@ -36,7 +36,6 @@ export function PopularBetsSection({ initialMarkets }: MarketsProps) {
     refetchIntervalInBackground: false,
   });
 
-  //console.log('markets from pupular bets section', markets);
   const formatTotalLocked = (amount: string) => {
     const num = parseFloat(amount);
     if (num >= 1000) {
@@ -46,6 +45,7 @@ export function PopularBetsSection({ initialMarkets }: MarketsProps) {
   };
 
   const markets = response?.markets ?? [];
+  console.log('markets from pupular bets section', markets);
 
   const formatCurrency = (amount: number) => {
     // const num = typeof amount === 'string' ? parseFloat(amount) : amount;

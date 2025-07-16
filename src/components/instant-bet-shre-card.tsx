@@ -266,7 +266,7 @@ export function InstantBetShareCard({
               className={`text-sm font-medium capitalize ${isWin ? 'text-green-800' : 'text-red-800'}`}
             >
               {/*bet.player.name}&apos;s {bet.betType*/}
-              {bet.title}
+              {bet.description}
             </div>
             <div className="mt-1 text-sm text-gray-600">
               Outcome: {outcomeLabel}

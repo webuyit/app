@@ -158,6 +158,7 @@ export function TournamentsSection({ tournaments }: Props) {
     (market) => market.entryType !== 'GATED',
   );
 
+  console.log('Tournaments from main', tournaments);
   // console.log('Filtered tournaments', filteredTournaments);
   //console.log('Tournaments', tournaments);
   /*useEffect(() => {
@@ -463,8 +464,8 @@ export function TournamentsSection({ tournaments }: Props) {
                       | 'PRIVATE'
                       | 'PREMIUM'
                       | 'GATED',
-                    prize: '70000', ///tournament.prizePool.toString(),
-                    entryFee: '200', //tournament.entryFee.toString(),
+                    prize: tournament.prizePool.toString(), ///tournament.prizePool.toString(),
+                    entryFee: tournament.entryFee.toFixed(2), //tournament.entryFee.toString(),
                     participants: tournament.participants,
                     maxParticipants: tournament.maxParticipants,
                     difficulty: 'Degens',
@@ -478,6 +479,7 @@ export function TournamentsSection({ tournaments }: Props) {
                       userHolding: '400',
                     },
                     leaderboard: sampleTournament.leaderboard,
+                    //markets: tournament.markets,
                   }}
                   trigger={
                     <Button
