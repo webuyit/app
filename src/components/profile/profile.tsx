@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 
+import { usePrivy } from '@privy-io/react-auth';
 import {
   useAccountModal,
   useChainModal,
@@ -32,6 +33,8 @@ import {
   Wallet,
   Zap,
 } from 'lucide-react';
+import { useTransitionRouter } from 'next-view-transitions';
+import { FaSignOutAlt } from 'react-icons/fa';
 import { useAccount } from 'wagmi';
 
 import { BottomNavigation } from '@/components/bottom-navigation';
@@ -157,13 +160,15 @@ export default function Profile({ transactions }: Props) {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showBalance, setShowBalance] = useState(true);
   const [isWalletRegisterSuccess, setisWalletRegisterSuccess] = useState(false);
+  const [isLoggingOut, setisLoggingOut] = useState(false);
   const { openConnectModal } = useConnectModal();
   const { address, isConnected } = useAccount();
+  const { logout } = usePrivy();
   const { toast } = useToast();
   const user = useUserStore<User>((s) => s.user);
   const params = useParams();
   const userId = params.profileId as string;
-
+  const router = useTransitionRouter();
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
     if (!isDarkMode) {
@@ -210,6 +215,12 @@ export default function Profile({ transactions }: Props) {
     setisWalletRegisterSuccess,
   });
 
+  const handleMoveOut = async () => {
+    setisLoggingOut(true);
+    await logout();
+    router.replace('/onboarding');
+    setisLoggingOut(false);
+  };
   return (
     <div className="min-h-screen bg-gray-50 transition-colors duration-300 dark:border-gray-700 dark:bg-gray-900 md:mx-auto md:max-w-md md:border-x md:border-gray-200">
       <Header />
@@ -448,6 +459,18 @@ export default function Profile({ transactions }: Props) {
                 </div>
               </CardContent>
             </Card>
+
+            <div className="my-2 w-full">
+              <Button
+                className="w-full"
+                variant={'secondary'}
+                onClick={handleMoveOut}
+                disabled={isLoggingOut}
+              >
+                <FaSignOutAlt />
+                {isLoggingOut ? 'Loading..' : 'Sign Out'}{' '}
+              </Button>
+            </div>
           </TabsContent>
 
           {/* Wallet Tab */}

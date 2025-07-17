@@ -131,6 +131,7 @@ const AccessCodeEntry = () => {
                       disabled={mutation.isPending || submitted}
                       className="gap-2"
                       pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
+                      inputMode="text"
                     >
                       <InputOTPGroup className="gap-2">
                         <InputOTPSlot
